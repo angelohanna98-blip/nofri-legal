@@ -80,6 +80,11 @@
   .hint { color:var(--muted); font-size:.82rem; margin:2px 0 0; }
   .advanced { margin-top:8px; }
   .advanced summary { color:var(--gold); cursor:pointer; font-size:.88rem; margin-bottom:6px; }
+  .suggest-row { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 2px; }
+  .suggest-row .chip { border:1px dashed var(--gold); color:var(--gold); background:transparent;
+    border-radius:999px; padding:4px 12px; font:inherit; font-size:.82rem; cursor:pointer; }
+  .suggest-row .chip:hover { background:var(--gold); color:#fff; border-style:solid; }
+  .suggest-row .chip[disabled] { opacity:.4; cursor:default; }
   .io-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
   .io-row button, .io-row label { padding:7px 16px; border:1px solid var(--gold); color:var(--gold);
     background:transparent; border-radius:8px; cursor:pointer; font:inherit; }
@@ -153,9 +158,10 @@
     <h3>Teams</h3>
     <ul id="set-teams" class="set-list"></ul>
     <form id="add-team" class="add">
-      <input name="name" placeholder="Team name (e.g. Arsenal, Lakers, Yankees)" autocomplete="off">
+      <input name="name" list="team-suggestions" placeholder="Team name (e.g. Arsenal, Lakers, Yankees)" autocomplete="off">
       <button type="submit">Add</button>
     </form>
+    <datalist id="team-suggestions"></datalist>
     <p class="hint">Just type the team name — we look up its last result and next fixture for you.</p>
     <details class="advanced">
       <summary>Advanced: add by ESPN id (more precise)</summary>
@@ -176,6 +182,7 @@
       <input name="feedUrl" placeholder="https://… RSS feed URL" autocomplete="off">
       <button type="submit">Add</button>
     </form>
+    <div id="news-suggestions" class="suggest-row"></div>
     <p class="hint">Headlines only, capped per source. No social timelines.</p>
 
     <h3>Quick links</h3>
