@@ -1,0 +1,20 @@
+{
+  "_about": "Popular team names for the Nofri Start add-team autocomplete. This is a typing aid only — teams are still resolved live (last result / next fixture) when the page loads, so the list need not be exhaustive and carries no IDs.",
+  "teams": [
+    "Arsenal", "Aston Villa", "Chelsea", "Liverpool", "Manchester City", "Manchester United",
+    "Newcastle United", "Tottenham Hotspur", "West Ham United",
+    "Real Madrid", "Barcelona", "Atletico Madrid", "Sevilla",
+    "Bayern Munich", "Borussia Dortmund", "RB Leipzig",
+    "Paris Saint-Germain", "Marseille",
+    "Juventus", "Inter Milan", "AC Milan", "Napoli", "AS Roma",
+    "Ajax", "Porto", "Benfica", "Celtic", "Rangers",
+    "Los Angeles Lakers", "Boston Celtics", "Golden State Warriors", "Miami Heat",
+    "Milwaukee Bucks", "Denver Nuggets", "New York Knicks", "Chicago Bulls",
+    "Kansas City Chiefs", "Dallas Cowboys", "Philadelphia Eagles", "San Francisco 49ers",
+    "Green Bay Packers", "Buffalo Bills", "New England Patriots", "Pittsburgh Steelers",
+    "New York Yankees", "Los Angeles Dodgers", "Boston Red Sox", "Chicago Cubs",
+    "Atlanta Braves", "Houston Astros",
+    "Toronto Maple Leafs", "Montreal Canadiens", "Boston Bruins", "New York Rangers",
+    "Edmonton Oilers", "Tampa Bay Lightning"
+  ]
+}

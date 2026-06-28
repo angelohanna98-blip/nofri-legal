@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>New Tab — Nofri</title>
+<style>
+  :root { --gold:#B07A2A; --muted:#857B63; --bg:#FAF9F6; --ink:#3A3733; }
+  html,body { height:100%; margin:0; background:var(--bg); }
+  body { font-family:-apple-system,Georgia,serif; color:var(--ink);
+    display:flex; align-items:center; justify-content:center; }
+  .wrap { text-align:center; padding:40px; }
+  .cross { font-size:2.4rem; color:var(--gold); }
+  p { color:var(--muted); margin-top:14px; }
+  a { color:var(--gold); }
+  .hide { display:none; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="cross">☦</div>
+    <p id="msg">Opening Nofri Start…</p>
+    <p id="fallback" class="hide">
+      Set your Nofri Start page in
+      <a href="#" id="opts">Nofri Focus settings</a>, then new tabs will open it here.
+    </p>
+  </div>
+  <script src="shared.js"></script>
+  <script src="newtab.js"></script>
+</body>
+</html>

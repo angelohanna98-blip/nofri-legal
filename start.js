@@ -19,11 +19,21 @@
 
   var CONFIG_KEY = "nofri.start.config.v1";
 
+  // One-click suggestions for the news settings (calm, no social timelines).
+  var SUGGESTED_NEWS = [
+    { name: "BBC Sport", feedUrl: "https://feeds.bbci.co.uk/sport/rss.xml" },
+    { name: "BBC Football", feedUrl: "https://feeds.bbci.co.uk/sport/football/rss.xml" },
+    { name: "ESPN", feedUrl: "https://www.espn.com/espn/rss/news" },
+    { name: "BBC News", feedUrl: "https://feeds.bbci.co.uk/news/rss.xml" },
+    { name: "Orthodox Christian Network", feedUrl: "https://myocn.net/feed/" }
+  ];
+
   var DEFAULT_CONFIG = {
     teams: [],
     news: [
       { name: "Orthodox Christian Network", feedUrl: "https://myocn.net/feed/", max: 3 },
-      { name: "BBC News", feedUrl: "https://feeds.bbci.co.uk/news/rss.xml", max: 3 }
+      { name: "BBC News", feedUrl: "https://feeds.bbci.co.uk/news/rss.xml", max: 3 },
+      { name: "BBC Sport", feedUrl: "https://feeds.bbci.co.uk/sport/rss.xml", max: 3 }
     ],
     links: [
       { label: "Holy Bible", url: "https://www.biblegateway.com" },
@@ -427,9 +437,41 @@
     else dlg.setAttribute("open", "");
   }
 
+  function buildTeamSuggestions() {
+    var dl = $("team-suggestions");
+    if (!dl || dl.childElementCount) return; // populate once
+    fetch("data/teams.json").then(function (r) { return r.json(); }).then(function (d) {
+      (d.teams || []).forEach(function (name) {
+        dl.appendChild(el("option", { value: name }));
+      });
+    }).catch(function () {});
+  }
+
+  function buildNewsSuggestions(cfg) {
+    var box = $("news-suggestions");
+    if (!box) return;
+    clear(box);
+    SUGGESTED_NEWS.forEach(function (s) {
+      var already = cfg.news.some(function (n) { return n.feedUrl === s.feedUrl; });
+      var chip = el("button", { class: "chip", type: "button", text: "+ " + s.name });
+      if (already) { chip.setAttribute("disabled", ""); }
+      else {
+        chip.addEventListener("click", function () {
+          cfg.news.push({ name: s.name, feedUrl: s.feedUrl, max: 3 });
+          saveConfig(cfg); buildSettings(cfg); renderNews(cfg);
+        });
+      }
+      box.appendChild(chip);
+    });
+  }
+
   function buildSettings(cfg) {
+    buildTeamSuggestions();
+    buildNewsSuggestions(cfg);
     fillList("set-teams", cfg.teams, function (t) {
-      return t.name + "  ·  " + t.sport + "/" + t.league + " #" + t.teamId;
+      return t.teamId
+        ? t.name + "  ·  " + t.sport + "/" + t.league + " #" + t.teamId
+        : t.name + "  ·  by name";
     }, function (i) { cfg.teams.splice(i, 1); saveConfig(cfg); buildSettings(cfg); renderSports(cfg); });
 
     fillList("set-news", cfg.news, function (n) { return n.name + "  ·  " + n.feedUrl; },
@@ -458,7 +500,19 @@
     $("open-settings").addEventListener("click", function (e) { e.preventDefault(); openSettings(cfg); });
     $("close-settings").addEventListener("click", function () { closeDlg(); });
 
+    // Simple path: add a team by name (resolved via TheSportsDB at load time).
     $("add-team").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var f = e.target;
+      var name = f.name.value.trim();
+      if (!name) return;
+      cfg.teams.push({ name: name, provider: "thesportsdb" });
+      saveConfig(cfg); f.reset();
+      buildSettings(cfg); renderSports(cfg);
+    });
+
+    // Advanced path: precise ESPN sport/league/teamId.
+    $("add-team-espn").addEventListener("submit", function (e) {
       e.preventDefault();
       var f = e.target;
       var team = {
