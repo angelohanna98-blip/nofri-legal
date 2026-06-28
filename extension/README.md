@@ -16,6 +16,8 @@ a short timed pass if you genuinely need a few minutes.
   `instagram.com`, `tiktok.com`, `reddit.com`. Edit the list any time.
 - **Gentle, not punitive.** The Pause page offers a way forward, including a
   timed grace pass (default 5 minutes) so focus mode never traps you.
+- **Every new tab opens Nofri Start.** The extension replaces the blank
+  new‑tab search box with your intentional start page (set its URL in Options).
 - **One‑click toggle.** The toolbar popup turns focus on/off instantly.
 - **Scheduling (free windows).** Optionally let focus pause itself during
   windows you choose (e.g. weekday evenings 6–9pm). Outside those windows the
@@ -45,6 +47,7 @@ a short timed pass if you genuinely need a few minutes.
 | `focus.html` / `focus.js` | The Pause page: verse, "Open Nofri Start", "Go back", and the timed grace pass. |
 | `options.html` / `options.js` | Manage the blocklist, focus toggle, pass length, and Start URL. |
 | `popup.html` / `popup.js` | Toolbar quick toggle + link to Options. |
+| `newtab.html` / `newtab.js` | New‑tab override that opens your Nofri Start URL. |
 | `icons/` | Toolbar/store icons (16/32/48/128) — the Nofri ☦ on gold. |
 
 Blocking uses `webNavigation.onBeforeNavigate` + `tabs.update` rather than

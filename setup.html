@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Set up — Nofri</title>
+<style>
+  :root { --gold:#B07A2A; --ink:#3A3733; --muted:#857B63; --bg:#FAF9F6; --card:#fff; --line:#E8E5DE; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,Georgia,serif; background:var(--bg); color:var(--ink); line-height:1.6; }
+  .wrap { max-width:720px; margin:0 auto; padding:48px 24px 80px; }
+  .cross { font-size:1.8rem; color:var(--gold); text-align:center; }
+  h1 { color:var(--gold); font-size:2rem; margin:6px 0 4px; text-align:center; }
+  .sub { color:var(--muted); margin:0 0 8px; text-align:center; }
+  h2 { color:var(--gold); font-size:1.2rem; margin-top:2em; }
+  a { color:var(--gold); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:8px 22px; margin-top:18px; }
+  ol { padding-left:1.2em; }
+  ol li { margin:10px 0; }
+  code { background:#F3F1EC; padding:1px 6px; border-radius:4px; font-size:.92em; }
+  .pill { display:inline-block; margin:4px 0; color:var(--gold); text-decoration:none; border:1px solid var(--gold); border-radius:999px; padding:6px 16px; }
+  .note { color:var(--muted); font-size:.9rem; }
+  .step-num { color:var(--gold); font-weight:bold; }
+  footer { margin-top:48px; color:var(--muted); font-size:.85rem; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="cross">☦</div>
+  <h1>Setting up Nofri</h1>
+  <p class="sub">Two parts: put your start page online, then install the focus extension.</p>
+
+  <div class="card">
+    <p>Nofri has two pieces that work together:</p>
+    <ul>
+      <li><strong>Nofri Start</strong> — a distraction-free start page (Coptic date, saint of the day, a verse and prayer, your teams, a few trusted headlines).</li>
+      <li><strong>Nofri Focus</strong> — a browser extension that gently blocks distracting sites and opens Nofri Start in every new tab.</li>
+    </ul>
+  </div>
+
+  <h2>Part A · Put Nofri Start online</h2>
+  <p>This gives you one link that works on your computer <em>and</em> your phone.</p>
+  <ol>
+    <li>In your GitHub repository, open <strong>Settings → Pages</strong>.</li>
+    <li>Under <em>Source</em>, choose <strong>“Deploy from a branch”</strong>, pick branch <code>main</code> and folder <code>/ (root)</code>, then <strong>Save</strong>.</li>
+    <li>Wait about a minute. Your start page will be live at:<br>
+      <a href="start.html">…/start.html</a> (on the published site this is your <code>github.io</code> address).</li>
+    <li>Make it your home / startup page:
+      <ul>
+        <li><strong>Chrome (desktop):</strong> Settings → <em>On startup</em> → “Open a specific page” → add the URL.</li>
+        <li><strong>Phone:</strong> set it as your browser’s homepage, or add it to your home screen.</li>
+      </ul>
+    </li>
+  </ol>
+  <p class="note">Once the Focus extension is installed, every new tab opens this page automatically too.</p>
+
+  <h2>Part B · Install Nofri Focus</h2>
+  <p>The extension runs from files on your own computer.</p>
+  <ol>
+    <li>On GitHub, click <strong>Code → Download ZIP</strong> and unzip it (or <code>git clone</code> the repo).</li>
+    <li>Open <code>chrome://extensions</code> (works in Chrome, Edge, and Brave).</li>
+    <li>Turn on <strong>Developer mode</strong> (top-right).</li>
+    <li>Click <strong>Load unpacked</strong> and select the <code>extension</code> folder.</li>
+    <li>Click the <strong>☦ Nofri Focus</strong> toolbar icon → <strong>Settings</strong>:
+      set your Nofri Start URL, then adjust the blocked sites and (optionally) a schedule.</li>
+    <li>Try visiting <code>twitter.com</code> — you’ll get the calm Pause page. 🎉</li>
+  </ol>
+  <p class="note">Prefer a normal install on every device? Upload the provided
+  <code>nofri-focus.zip</code> to the Chrome Web Store Developer Console (a one-time $5 fee).
+  Listing text and screenshots are included in the <code>extension/</code> folder.</p>
+
+  <h2>Tips</h2>
+  <ul>
+    <li><strong>Teams:</strong> in Nofri Start → Customize, just type a team name (e.g. “Arsenal”).</li>
+    <li><strong>News:</strong> use the suggested-source buttons, or paste any RSS feed URL.</li>
+    <li><strong>Schedule:</strong> in the extension, set “free” windows (e.g. weekday evenings) when distractions are allowed; outside them they stay blocked.</li>
+    <li><strong>Everything is private</strong> — your settings live only in your browser.</li>
+  </ul>
+
+  <p style="text-align:center; margin-top:28px;">
+    <a class="pill" href="start.html">Open Nofri Start</a>
+  </p>
+
+  <footer>© 2026 Nofri · <a href="index.html">Home</a> · <a href="privacy.html">Privacy</a> · <a href="support.html">Support</a></footer>
+</div>
+</body>
+</html>

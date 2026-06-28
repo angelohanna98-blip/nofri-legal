@@ -41,9 +41,16 @@ Nofri Focus pairs with Nofri Start, a distraction-free start page, but works
 perfectly well on its own.
 
 ## Single purpose (required)
-Nofri Focus has one purpose: to help the user avoid distracting websites by
-redirecting navigations to sites on a user-defined blocklist to a local "Pause"
-reminder page, with an optional schedule and a temporary grace pass.
+Nofri Focus has one purpose: to help the user stay focused while browsing. It
+does this by (a) redirecting navigations to user-defined blocked sites to a
+local "Pause" reminder page (with an optional schedule and a temporary grace
+pass), and (b) replacing the new-tab page with the user's chosen distraction-free
+start page. Both behaviors serve the single purpose of reducing distraction.
+
+NOTE: This extension overrides the browser's new-tab page (chrome_url_overrides
+→ newtab), which must be disclosed. If you would rather submit a blocking-only
+version, remove the "chrome_url_overrides" line from manifest.json and the
+newtab.html/newtab.js files before packaging.
 
 ## Permission justifications
 • webNavigation — to detect when the user navigates to a site so the extension
