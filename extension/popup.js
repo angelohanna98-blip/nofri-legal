@@ -9,9 +9,13 @@
 
   function refresh(s) {
     $("enabled").checked = !!s.enabled;
-    $("status").textContent = s.enabled
-      ? "Focus on · " + s.blocklist.length + " sites blocked"
-      : "Focus off";
+    if (!s.enabled) {
+      $("status").textContent = "Focus off";
+    } else if (nofriInFreeWindow(s.schedule, new Date())) {
+      $("status").textContent = "Free time · focus paused by schedule";
+    } else {
+      $("status").textContent = "Focus on · " + s.blocklist.length + " sites blocked";
+    }
   }
 
   nofriGetSettings().then(function (s) {

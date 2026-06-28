@@ -34,6 +34,17 @@
   .actions { margin-top:24px; display:flex; gap:10px; }
   .actions button { padding:8px 16px; border:1px solid var(--gold); color:var(--gold); background:transparent; border-radius:8px; cursor:pointer; font:inherit; }
   .saved { color:var(--gold); font-size:.85rem; margin-left:8px; }
+  #schedule-area { transition:opacity .2s; }
+  #schedule-area.disabled { opacity:.45; pointer-events:none; }
+  .window-form { display:block; }
+  .days { display:flex; gap:6px; flex-wrap:wrap; margin:8px 0; }
+  .day-chip { display:inline-flex; align-items:center; justify-content:center; min-width:38px; padding:6px 8px;
+    border:1px solid var(--line); border-radius:999px; cursor:pointer; user-select:none; font-size:.85rem; background:var(--card); }
+  .day-chip.on { background:var(--gold); color:#fff; border-color:var(--gold); }
+  .times { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .times label { font-size:.9rem; color:var(--muted); }
+  .times input[type="time"] { padding:6px 8px; border:1px solid var(--line); border-radius:8px; font:inherit; }
+  .times button { padding:8px 16px; border:1px solid var(--gold); background:var(--gold); color:#fff; border-radius:8px; cursor:pointer; font:inherit; }
 </style>
 </head>
 <body>
@@ -54,6 +65,24 @@
   <h2>"Open Nofri Start" goes to</h2>
   <input type="url" id="startUrl" placeholder="https://…your Nofri Start URL">
   <p class="muted">Set this to your hosted Nofri Start page (your GitHub Pages URL).</p>
+
+  <h2>When to allow distractions</h2>
+  <div class="row">
+    <label for="scheduled"><strong>Use a schedule</strong><br><span class="muted">Off: focus is always on. On: distractions are allowed only during the free windows below.</span></label>
+    <span class="switch"><input type="checkbox" id="scheduled"><span class="slider"></span></span>
+  </div>
+  <div id="schedule-area">
+    <ul class="list" id="windows"></ul>
+    <form class="add window-form" id="add-window">
+      <div class="days" id="day-picker"></div>
+      <div class="times">
+        <label>Allow from <input type="time" name="start" value="18:00" required></label>
+        <label>to <input type="time" name="end" value="21:00" required></label>
+        <button type="submit">Add window</button>
+      </div>
+    </form>
+    <p class="muted">Outside these windows, the blocked sites stay blocked. A window whose end time is earlier than its start crosses midnight.</p>
+  </div>
 
   <h2>Blocked sites</h2>
   <ul class="list" id="blocklist"></ul>

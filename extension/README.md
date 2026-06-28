@@ -17,6 +17,9 @@ a short timed pass if you genuinely need a few minutes.
 - **Gentle, not punitive.** The Pause page offers a way forward, including a
   timed grace pass (default 5 minutes) so focus mode never traps you.
 - **One‑click toggle.** The toolbar popup turns focus on/off instantly.
+- **Scheduling (free windows).** Optionally let focus pause itself during
+  windows you choose (e.g. weekday evenings 6–9pm). Outside those windows the
+  blocklist stays on. Windows are per‑weekday and may cross midnight.
 - **Local & private.** All settings live in `chrome.storage.local` on your
   device. No account, no servers, no tracking — same ethos as Nofri Start.
 
@@ -29,8 +32,8 @@ a short timed pass if you genuinely need a few minutes.
    your hosted Nofri Start URL (your GitHub Pages address), then add or remove
    blocked sites to taste.
 
-> Publishing to the Chrome Web Store later just needs icon PNGs (16/48/128) and
-> a store listing; the code is ready as‑is.
+> Icons (16/32/48/128) are included. Publishing to the Chrome Web Store later
+> just needs a store listing and a zip of this folder; the code is ready as‑is.
 
 ## How it works
 
@@ -42,6 +45,7 @@ a short timed pass if you genuinely need a few minutes.
 | `focus.html` / `focus.js` | The Pause page: verse, "Open Nofri Start", "Go back", and the timed grace pass. |
 | `options.html` / `options.js` | Manage the blocklist, focus toggle, pass length, and Start URL. |
 | `popup.html` / `popup.js` | Toolbar quick toggle + link to Options. |
+| `icons/` | Toolbar/store icons (16/32/48/128) — the Nofri ☦ on gold. |
 
 Blocking uses `webNavigation.onBeforeNavigate` + `tabs.update` rather than
 `declarativeNetRequest` so the Pause page can show *which* site was blocked and
@@ -63,4 +67,3 @@ works on its own.
   support this kind of extension.
 - A determined user can disable any extension — this is a *guardrail* for the
   honest moment of distraction, not a hard lock.
-- Add icon PNGs before submitting to a web store.

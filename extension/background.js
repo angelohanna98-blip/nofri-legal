@@ -21,9 +21,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(function (details) {
   if (u.protocol !== "http:" && u.protocol !== "https:") return; // skip our own pages, about:, etc.
 
   nofriGetSettings().then(function (s) {
-    if (!s.enabled) return;
-    if (!nofriHostMatches(u.hostname, s.blocklist)) return;
-    if (nofriHasGrace(u.hostname, s.grace, Date.now())) return;
+    if (!nofriShouldBlock(u.hostname, s, new Date())) return;
 
     var target = chrome.runtime.getURL("focus.html") +
       "?from=" + encodeURIComponent(u.hostname) +
