@@ -1,0 +1,42 @@
+{
+  "_about": "Starter Synaxarium for Nofri Start — a curated set of major fixed Coptic feasts, keyed by '<day> <CivilMonth>' (matching MONTHS_CIVIL in coptic.js). This is intentionally small; days not listed fall back gracefully to 'Commemorations for <date>' with a link to the full Synaxarium.",
+  "_full_dataset": "For the complete daily Synaxarium, drop in the dataset from codeberg.org/randogoth/coptic-synaxarium (English translation by St. George Coptic Orthodox Church, Chicago — free to use). Its keys use the same '<day> <CivilMonth>' format.",
+  "entries": {
+    "1 Tout": {
+      "feasts": ["The Feast of Nayrouz — the Coptic New Year and the Feast of the Martyrs."],
+      "description": "<p>The Coptic year begins on this day. It is called the Feast of Nayrouz, and is dedicated to the memory of the martyrs, for the Coptic era is the Era of the Martyrs (Anno Martyrum), reckoned from the reign of Diocletian.</p>"
+    },
+    "17 Tout": {
+      "feasts": ["The Feast of the Cross — the consecration of the Church of the Resurrection and the appearance of the Honoured Cross."],
+      "description": "<p>On this day the Church celebrates the Feast of the Cross, commemorating the finding of the Honoured Cross and the consecration of the Church of the Holy Resurrection in Jerusalem.</p>"
+    },
+    "29 Kiahk": {
+      "feasts": ["The Nativity of our Lord and God and Saviour Jesus Christ."],
+      "description": "<p>On this glorious day the Lord Jesus Christ was born in Bethlehem of Judea, of the holy Virgin Mary. The angels praised God saying, 'Glory to God in the highest, and on earth peace, good will toward men.'</p>"
+    },
+    "11 Toba": {
+      "feasts": ["The Baptism (Theophany) of our Lord Jesus Christ in the Jordan."],
+      "description": "<p>On this day the Lord Jesus Christ was baptized by John in the river Jordan. The heavens were opened, the Spirit descended as a dove, and the voice of the Father bore witness, 'This is my beloved Son, in whom I am well pleased.'</p>"
+    },
+    "13 Toba": {
+      "feasts": ["The first miracle of our Lord — the wedding at Cana of Galilee."],
+      "description": "<p>On this day the Lord Jesus Christ performed His first sign at the wedding in Cana of Galilee, turning water into wine, and manifested His glory.</p>"
+    },
+    "8 Amshir": {
+      "feasts": ["The Entrance of our Lord into the Temple (the Presentation)."],
+      "description": "<p>On this day, forty days after the Nativity, the Lord Jesus Christ was presented in the Temple, where the righteous elder Simeon received Him in his arms and blessed God.</p>"
+    },
+    "29 Baramhat": {
+      "feasts": ["The Annunciation to the holy Virgin Mary by the Archangel Gabriel."],
+      "description": "<p>On this day the Archangel Gabriel announced to the Virgin Mary the conception of the Lord Jesus Christ, saying, 'Hail, thou that art highly favoured, the Lord is with thee.'</p>"
+    },
+    "24 Bashans": {
+      "feasts": ["The Entry of our Lord into the land of Egypt."],
+      "description": "<p>On this day the Holy Family entered the land of Egypt, fleeing from Herod, fulfilling the prophecy, 'Out of Egypt have I called my son,' and blessing the land by their presence.</p>"
+    },
+    "13 Mesra": {
+      "feasts": ["The Transfiguration of our Lord and Saviour Jesus Christ on the mountain."],
+      "description": "<p>On this day the Lord Jesus Christ was transfigured upon the mountain before Peter, James, and John. His face shone as the sun, and the Father's voice was heard, 'This is my beloved Son; hear ye him.'</p>"
+    }
+  }
+}

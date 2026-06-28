@@ -1,0 +1,29 @@
+{
+  "_attribution": "Traditional Orthodox prayers, in common liturgical use.",
+  "prayers": [
+    { "title": "The Jesus Prayer", "text": "Lord Jesus Christ, Son of God, have mercy on me, a sinner." },
+    { "title": "The Trisagion", "text": "Holy God, Holy Mighty, Holy Immortal, have mercy upon us." },
+    { "title": "Kyrie Eleison", "text": "Lord, have mercy. Lord, have mercy. Lord, have mercy." },
+    { "title": "Glory to God", "text": "Glory be to the Father, and to the Son, and to the Holy Spirit, now and ever, and unto the ages of ages. Amen." },
+    { "title": "A Morning Offering", "text": "O Lord, grant that I may meet all that this coming day brings to me with peace of soul, and with firm conviction that Thy will governs all." },
+    { "title": "For a Quiet Heart", "text": "O Lord, calm the waves of this heart; calm its tempest. Be still, my soul, and let the Lord thy God order all things; for He alone is good." },
+    { "title": "Prayer of St. Ephraim", "text": "O Lord and Master of my life, take from me the spirit of sloth, despair, lust of power, and idle talk. But give rather the spirit of chastity, humility, patience, and love to Thy servant." },
+    { "title": "Thanksgiving", "text": "Let us give thanks unto the beneficent and merciful God, the Father of our Lord, God and Saviour, Jesus Christ. For He has covered us, helped us, kept us, accepted us unto Him, and brought us to this hour." },
+    { "title": "Before Work", "text": "O Lord, bless the work of my hands this day, that whatsoever I do may be done heartily, as unto Thee, and not unto men. Amen." },
+    { "title": "The Lord's Prayer", "text": "Our Father, who art in heaven, hallowed be Thy name. Thy kingdom come, Thy will be done, on earth as it is in heaven. Give us this day our daily bread, and forgive us our trespasses, as we forgive those who trespass against us." },
+    { "title": "For Guidance", "text": "Direct, O Lord, my goings in Thy way, and let no iniquity have dominion over me. Teach me to do Thy will, for Thou art my God." },
+    { "title": "To the Theotokos", "text": "Hail Mary, full of grace, the Lord is with thee. We magnify thee, O Mother of the True Light, and we glorify thee, O holy Theotokos, for thou hast borne unto us the Saviour of our souls." },
+    { "title": "For Focus", "text": "O Lord, free my mind from every vain and wandering thought, and gather my heart to attend to Thee alone, that I may serve Thee this day without distraction." },
+    { "title": "For Humility", "text": "O Lord, give me to see my own faults and not to judge my brother; for blessed art Thou unto the ages of ages. Amen." },
+    { "title": "Evening Prayer", "text": "Into Thy hands, O Lord, I commend my spirit and my body. Bless me, have mercy on me, and grant me life eternal. Amen." },
+    { "title": "For Strength", "text": "O Lord, be Thou my strength and my refuge this day. Uphold me by Thy right hand, that I may walk in Thy ways and not stumble." },
+    { "title": "Prayer of the Publican", "text": "God, be merciful to me, a sinner." },
+    { "title": "For Peace", "text": "O King of Peace, grant us Thy peace, establish for us Thy peace, and forgive us our sins; for Thine is the power, the glory, the blessing, and the might, for ever. Amen." },
+    { "title": "For the Day", "text": "O Christ our God, who at all times and in every hour art worshipped and glorified, accept the supplications which we offer unto Thee this day, and guide our lives in the way of Thy commandments." },
+    { "title": "Renewal", "text": "Create in me a clean heart, O God, and renew a right spirit within me. Cast me not away from Thy presence, and take not Thy Holy Spirit from me." },
+    { "title": "For Gratitude", "text": "We thank Thee, O Lord our God, for Thou hast raised us from our beds, and put into our mouths the word of praise, to worship and call upon Thy holy name." },
+    { "title": "Short Doxology", "text": "Glory to Thee who hast shown us the light. Glory to God in the highest, and on earth peace, good will toward men." },
+    { "title": "For Watchfulness", "text": "O Lord, set a watch before my mouth, and keep the door of my lips. Let not my heart incline to any evil thing." },
+    { "title": "Closing Prayer", "text": "Lord, have mercy. Lord, have mercy. Lord, bless. Amen. May the grace of our Lord Jesus Christ be with us all. Amen." }
+  ]
+}

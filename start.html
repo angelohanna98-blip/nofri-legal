@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nofri Start</title>
+<meta name="description" content="A distraction-free Christian start page: the Coptic date, saint of the day, a daily verse and prayer, your teams, and a few trusted headlines — with no infinite feed.">
+<style>
+  :root { --gold:#B07A2A; --ink:#3A3733; --muted:#857B63; --bg:#FAF9F6; --card:#fff; --line:#E8E5DE; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,Georgia,serif; background:var(--bg); color:var(--ink); line-height:1.6; }
+  a { color:var(--gold); }
+  .wrap { max-width:980px; margin:0 auto; padding:40px 20px 72px; }
+
+  /* Header */
+  header.hero { text-align:center; margin-bottom:8px; }
+  .cross { font-size:2rem; color:var(--gold); }
+  .greeting { color:var(--muted); font-size:1.05rem; margin:2px 0 14px; }
+  #date-greg { font-size:1.6rem; color:var(--ink); }
+  #date-coptic { color:var(--gold); font-size:1.05rem; margin-top:2px; }
+
+  /* Section scaffold */
+  section { margin-top:34px; }
+  h2.block-title { color:var(--gold); font-size:1.15rem; margin:0 0 12px; text-align:center; letter-spacing:.02em; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 20px; }
+
+  /* Orthodox block */
+  .orthodox { max-width:640px; margin:0 auto; }
+  .orthodox .card + .card { margin-top:14px; }
+  .orthodox h3 { color:var(--gold); font-size:1rem; margin:0 0 6px; }
+  .feast-list { margin:0; padding-left:1.1em; }
+  .feast-list li { margin:4px 0; }
+  .synaxarium { margin-top:10px; }
+  .synaxarium summary { color:var(--gold); cursor:pointer; }
+  .synaxarium-body { margin-top:8px; color:var(--ink); font-size:.97rem; }
+  .synaxarium-body p { margin:.6em 0; }
+  .verse-text { font-size:1.1rem; margin:0; }
+  .verse-ref { color:var(--muted); margin:6px 0 0; }
+  .prayer-title { color:var(--gold); font-size:1rem; margin:0 0 4px; }
+
+  /* Quick links / focus */
+  .links { text-align:center; }
+  .focus-note { color:var(--muted); font-size:.92rem; margin:0 auto 14px; max-width:560px; text-align:center; }
+  #links a.pill, .pill { display:inline-block; margin:6px 8px; color:var(--gold); text-decoration:none;
+    border:1px solid var(--gold); border-radius:999px; padding:8px 20px; background:transparent; }
+  #links a.pill:hover { background:var(--gold); color:#fff; }
+
+  /* Sports + news grids */
+  .grid { display:grid; grid-template-columns:1fr; gap:14px; }
+  @media (min-width:720px) { .grid { grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); } }
+  .sport-card h3, .news-card h3 { color:var(--gold); font-size:1.05rem; margin:0 0 8px; }
+  .sport-line { margin:4px 0; }
+  .sport-label { display:inline-block; min-width:42px; color:var(--muted); font-size:.85rem; }
+  .news-list { margin:0; padding-left:1.1em; }
+  .news-list li { margin:6px 0; }
+  .news-list a { text-decoration:none; }
+  .news-list a:hover { text-decoration:underline; }
+  .muted { color:var(--muted); }
+  .skel { opacity:.6; }
+
+  /* Footer */
+  footer { margin-top:56px; text-align:center; color:var(--muted); font-size:.85rem; }
+  footer a { color:var(--gold); }
+
+  /* Settings dialog */
+  dialog#settings { border:1px solid var(--line); border-radius:14px; max-width:620px; width:92%;
+    padding:0; color:var(--ink); background:var(--card); }
+  dialog#settings::backdrop { background:rgba(58,55,51,.35); }
+  .dlg-head { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid var(--line); }
+  .dlg-head h2 { color:var(--gold); margin:0; font-size:1.2rem; }
+  .dlg-body { padding:8px 20px 22px; max-height:70vh; overflow:auto; }
+  .dlg-body h3 { color:var(--ink); font-size:1rem; margin:20px 0 6px; }
+  .set-list { list-style:none; margin:0 0 8px; padding:0; }
+  .set-list li { display:flex; justify-content:space-between; align-items:center; gap:8px;
+    border:1px solid var(--line); border-radius:8px; padding:6px 10px; margin:5px 0; font-size:.92rem; }
+  .set-list .remove { border:none; background:transparent; color:var(--muted); font-size:1.2rem; cursor:pointer; line-height:1; }
+  form.add { display:flex; flex-wrap:wrap; gap:6px; margin:6px 0 4px; }
+  form.add input { flex:1 1 120px; min-width:0; padding:7px 10px; border:1px solid var(--line); border-radius:8px; font:inherit; }
+  form.add button { padding:7px 16px; border:1px solid var(--gold); background:var(--gold); color:#fff; border-radius:8px; cursor:pointer; font:inherit; }
+  .hint { color:var(--muted); font-size:.82rem; margin:2px 0 0; }
+  .io-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
+  .io-row button, .io-row label { padding:7px 16px; border:1px solid var(--gold); color:var(--gold);
+    background:transparent; border-radius:8px; cursor:pointer; font:inherit; }
+  #import-config { display:none; }
+  #close-settings { border:none; background:transparent; color:var(--muted); font-size:1.5rem; cursor:pointer; line-height:1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="cross">☦</div>
+    <p class="greeting">Nophri — good day. Begin here, not in the feed.</p>
+    <div id="date-greg">—</div>
+    <div id="date-coptic">—</div>
+  </header>
+
+  <!-- Orthodox daily content: renders instantly, works fully offline -->
+  <section class="orthodox">
+    <div class="card">
+      <h3>Commemoration of the day</h3>
+      <div id="saint"><p class="muted skel">Loading…</p></div>
+    </div>
+    <div class="card">
+      <h3>Today’s reading</h3>
+      <div id="verse"><p class="muted skel">Loading…</p></div>
+    </div>
+    <div class="card">
+      <h3>A prayer for today</h3>
+      <div id="prayer"><p class="muted skel">Loading…</p></div>
+    </div>
+  </section>
+
+  <!-- Quick links / focus -->
+  <section class="links">
+    <h2 class="block-title">Where you meant to go</h2>
+    <p class="focus-note">Only the few places you trust — no search box, no timeline to fall into.</p>
+    <div id="links"></div>
+  </section>
+
+  <!-- Sports -->
+  <section>
+    <h2 class="block-title">Your teams</h2>
+    <div id="sports" class="grid"></div>
+  </section>
+
+  <!-- News -->
+  <section>
+    <h2 class="block-title">A few headlines</h2>
+    <div id="news" class="grid"></div>
+  </section>
+
+  <footer>
+    <a href="#" id="open-settings">Customize</a> ·
+    <a href="index.html">Nofri</a> ·
+    <a href="privacy.html">Privacy</a> ·
+    <a href="support.html">Support</a>
+    <p>© 2026 Nofri · Local-first and private — your settings stay on this device.</p>
+  </footer>
+</div>
+
+<!-- Settings -->
+<dialog id="settings">
+  <div class="dlg-head">
+    <h2>Customize Nofri Start</h2>
+    <button id="close-settings" title="Close" aria-label="Close">×</button>
+  </div>
+  <div class="dlg-body">
+
+    <h3>Teams</h3>
+    <ul id="set-teams" class="set-list"></ul>
+    <form id="add-team" class="add">
+      <input name="name" placeholder="Display name (e.g. Arsenal)" autocomplete="off">
+      <input name="sport" placeholder="sport (e.g. soccer)" autocomplete="off">
+      <input name="league" placeholder="league (e.g. eng.1)" autocomplete="off">
+      <input name="teamId" placeholder="ESPN team id" autocomplete="off">
+      <button type="submit">Add</button>
+    </form>
+    <p class="hint">Uses ESPN’s public data. sport/league examples: soccer · eng.1, basketball · nba, football · nfl, baseball · mlb, hockey · nhl. Find a team id from its ESPN page URL.</p>
+
+    <h3>News sources (RSS)</h3>
+    <ul id="set-news" class="set-list"></ul>
+    <form id="add-news" class="add">
+      <input name="name" placeholder="Source name" autocomplete="off">
+      <input name="feedUrl" placeholder="https://… RSS feed URL" autocomplete="off">
+      <button type="submit">Add</button>
+    </form>
+    <p class="hint">Headlines only, capped per source. No social timelines.</p>
+
+    <h3>Quick links</h3>
+    <ul id="set-links" class="set-list"></ul>
+    <form id="add-link" class="add">
+      <input name="label" placeholder="Label" autocomplete="off">
+      <input name="url" placeholder="https://…" autocomplete="off">
+      <button type="submit">Add</button>
+    </form>
+    <p class="hint">These double as your “trusted sites” list for the upcoming focus extension.</p>
+
+    <div class="io-row">
+      <button id="export-config" type="button">Export config</button>
+      <label for="import-config">Import config</label>
+      <input id="import-config" type="file" accept="application/json,.json">
+    </div>
+  </div>
+</dialog>
+
+<script src="coptic.js"></script>
+<script src="start.js"></script>
+</body>
+</html>
