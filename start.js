@@ -429,7 +429,9 @@
 
   function buildSettings(cfg) {
     fillList("set-teams", cfg.teams, function (t) {
-      return t.name + "  ·  " + t.sport + "/" + t.league + " #" + t.teamId;
+      return t.teamId
+        ? t.name + "  ·  " + t.sport + "/" + t.league + " #" + t.teamId
+        : t.name + "  ·  by name";
     }, function (i) { cfg.teams.splice(i, 1); saveConfig(cfg); buildSettings(cfg); renderSports(cfg); });
 
     fillList("set-news", cfg.news, function (n) { return n.name + "  ·  " + n.feedUrl; },
@@ -458,7 +460,19 @@
     $("open-settings").addEventListener("click", function (e) { e.preventDefault(); openSettings(cfg); });
     $("close-settings").addEventListener("click", function () { closeDlg(); });
 
+    // Simple path: add a team by name (resolved via TheSportsDB at load time).
     $("add-team").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var f = e.target;
+      var name = f.name.value.trim();
+      if (!name) return;
+      cfg.teams.push({ name: name, provider: "thesportsdb" });
+      saveConfig(cfg); f.reset();
+      buildSettings(cfg); renderSports(cfg);
+    });
+
+    // Advanced path: precise ESPN sport/league/teamId.
+    $("add-team-espn").addEventListener("submit", function (e) {
       e.preventDefault();
       var f = e.target;
       var team = {

@@ -37,6 +37,30 @@
     "13 Mesra": {
       "feasts": ["The Transfiguration of our Lord and Saviour Jesus Christ on the mountain."],
       "description": "<p>On this day the Lord Jesus Christ was transfigured upon the mountain before Peter, James, and John. His face shone as the sun, and the Father's voice was heard, 'This is my beloved Son; hear ye him.'</p>"
+    },
+    "16 Mesra": {
+      "feasts": ["The Assumption (Dormition) of the body of the holy Virgin Mary."],
+      "description": "<p>On this day the Church commemorates the assumption of the body of the holy Virgin Mary, the Mother of God, into the heavens.</p>"
+    },
+    "1 Nasie": {
+      "feasts": ["The Feast of the Archangel Raphael, and the close of the Coptic year."],
+      "description": "<p>During the short epagomenal days that close the Coptic year, the Church gives thanks to God for His mercies throughout the year that has passed.</p>"
+    },
+    "1 Baba": {
+      "feasts": ["The commemoration of the holy season; thanksgiving for the harvest and the waters of the Nile."],
+      "description": "<p>In this season the Church offers prayers of thanksgiving for the waters, the seeds, and the fruits, asking God to bless the year with His goodness.</p>"
+    },
+    "12 Hator": {
+      "feasts": ["The Commemoration of the Archangel Michael, the chief of the heavenly hosts."],
+      "description": "<p>On the twelfth of each Coptic month the Church commemorates the Archangel Michael, intercessor for mankind before God; the feast of Hathor is kept with special honour.</p>"
+    },
+    "8 Koiak": {
+      "feasts": ["The Feast of the Presentation of the Virgin Mary into the Temple."],
+      "description": "<p>On this day the Church commemorates the entrance of the holy Virgin Mary into the Temple, where she was raised in purity before God.</p>"
+    },
+    "10 Paremhat": {
+      "feasts": ["The Departure of St. Macarius the Great, the lamp of the wilderness of Scetis."],
+      "description": "<p>On this day the great saint Anba Macarius, the star of the monastic wilderness of Shiheet (Scetis), departed in peace after a life of asceticism and teaching.</p>"
     }
   }
 }

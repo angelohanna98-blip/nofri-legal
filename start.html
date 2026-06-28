@@ -78,6 +78,8 @@
   form.add input { flex:1 1 120px; min-width:0; padding:7px 10px; border:1px solid var(--line); border-radius:8px; font:inherit; }
   form.add button { padding:7px 16px; border:1px solid var(--gold); background:var(--gold); color:#fff; border-radius:8px; cursor:pointer; font:inherit; }
   .hint { color:var(--muted); font-size:.82rem; margin:2px 0 0; }
+  .advanced { margin-top:8px; }
+  .advanced summary { color:var(--gold); cursor:pointer; font-size:.88rem; margin-bottom:6px; }
   .io-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
   .io-row button, .io-row label { padding:7px 16px; border:1px solid var(--gold); color:var(--gold);
     background:transparent; border-radius:8px; cursor:pointer; font:inherit; }
@@ -151,13 +153,21 @@
     <h3>Teams</h3>
     <ul id="set-teams" class="set-list"></ul>
     <form id="add-team" class="add">
-      <input name="name" placeholder="Display name (e.g. Arsenal)" autocomplete="off">
-      <input name="sport" placeholder="sport (e.g. soccer)" autocomplete="off">
-      <input name="league" placeholder="league (e.g. eng.1)" autocomplete="off">
-      <input name="teamId" placeholder="ESPN team id" autocomplete="off">
+      <input name="name" placeholder="Team name (e.g. Arsenal, Lakers, Yankees)" autocomplete="off">
       <button type="submit">Add</button>
     </form>
-    <p class="hint">Uses ESPN’s public data. sport/league examples: soccer · eng.1, basketball · nba, football · nfl, baseball · mlb, hockey · nhl. Find a team id from its ESPN page URL.</p>
+    <p class="hint">Just type the team name — we look up its last result and next fixture for you.</p>
+    <details class="advanced">
+      <summary>Advanced: add by ESPN id (more precise)</summary>
+      <form id="add-team-espn" class="add">
+        <input name="name" placeholder="Display name" autocomplete="off">
+        <input name="sport" placeholder="sport (e.g. soccer)" autocomplete="off">
+        <input name="league" placeholder="league (e.g. eng.1)" autocomplete="off">
+        <input name="teamId" placeholder="ESPN team id" autocomplete="off">
+        <button type="submit">Add</button>
+      </form>
+      <p class="hint">Uses ESPN’s public data. sport/league examples: soccer · eng.1, basketball · nba, football · nfl, baseball · mlb, hockey · nhl. Find a team id from its ESPN page URL.</p>
+    </details>
 
     <h3>News sources (RSS)</h3>
     <ul id="set-news" class="set-list"></ul>
