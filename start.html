@@ -19,6 +19,15 @@
   #date-greg { font-size:1.6rem; color:var(--ink); }
   #date-coptic { color:var(--gold); font-size:1.05rem; margin-top:2px; }
 
+  /* Quiet web search */
+  .search { max-width:520px; margin:20px auto 0; display:flex; align-items:center; gap:10px;
+    background:var(--card); border:1px solid var(--line); border-radius:999px; padding:11px 20px;
+    box-shadow:0 1px 2px rgba(58,55,51,.04); }
+  .search:focus-within { border-color:var(--gold); }
+  .search-ic { color:var(--muted); font-size:1.3rem; line-height:1; }
+  .search input { flex:1; border:none; background:transparent; font:inherit; font-size:1rem; color:var(--ink); outline:none; min-width:0; }
+  .search input::placeholder { color:var(--muted); }
+
   /* Section scaffold */
   section { margin-top:34px; }
   h2.block-title { color:var(--gold); font-size:1.15rem; margin:0 0 12px; text-align:center; letter-spacing:.02em; }
@@ -37,6 +46,11 @@
   .verse-text { font-size:1.1rem; margin:0; }
   .verse-ref { color:var(--muted); margin:6px 0 0; }
   .prayer-title { color:var(--gold); font-size:1rem; margin:0 0 4px; }
+  .icon-fig { margin:0; text-align:center; }
+  .icon-fig img { max-width:300px; width:100%; height:auto; border-radius:10px; border:1px solid var(--line); display:inline-block; }
+  .icon-fig figcaption { margin-top:10px; font-size:.88rem; line-height:1.45; }
+  .icon-fig .icon-title { color:var(--ink); }
+  .icon-fig .icon-src a { color:var(--gold); }
 
   /* Quick links / focus */
   .links { text-align:center; }
@@ -102,8 +116,22 @@
     <div id="date-coptic">—</div>
   </header>
 
+  <!-- Quiet web search (Google under the hood, Nofri on the surface) -->
+  <form class="search" action="https://www.google.com/search" method="GET" role="search">
+    <span class="search-ic" aria-hidden="true">⌕</span>
+    <input type="text" name="q" autocomplete="off" aria-label="Search the web"
+           placeholder="Search…">
+  </form>
+
   <!-- Orthodox daily content: renders instantly, works fully offline -->
   <section class="orthodox">
+    <div class="card icon-card" id="icon-card" hidden>
+      <h3>Icon of the day</h3>
+      <figure class="icon-fig">
+        <img id="icon-img" alt="">
+        <figcaption id="icon-cap" class="muted"></figcaption>
+      </figure>
+    </div>
     <div class="card">
       <h3>Commemoration of the day</h3>
       <div id="saint"><p class="muted skel">Loading…</p></div>
@@ -121,7 +149,7 @@
   <!-- Quick links / focus -->
   <section class="links">
     <h2 class="block-title">Where you meant to go</h2>
-    <p class="focus-note">Only the few places you trust — no search box, no timeline to fall into.
+    <p class="focus-note">Only the few places you trust — no endless timeline to fall into.
     Want the distracting sites actually blocked? Add the <a href="https://github.com/angelohanna98-blip/nofri-legal/tree/main/extension">Nofri Focus</a> browser extension.</p>
     <div id="links"></div>
   </section>
