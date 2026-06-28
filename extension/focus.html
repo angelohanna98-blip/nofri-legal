@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pause — Nofri Focus</title>
+<style>
+  :root { --gold:#B07A2A; --ink:#3A3733; --muted:#857B63; --bg:#FAF9F6; --card:#fff; --line:#E8E5DE; }
+  * { box-sizing:border-box; }
+  html, body { height:100%; }
+  body { margin:0; font-family:-apple-system,Georgia,serif; background:var(--bg); color:var(--ink);
+    line-height:1.6; display:flex; align-items:center; justify-content:center; }
+  .wrap { max-width:560px; padding:48px 28px; text-align:center; }
+  .cross { font-size:2.2rem; color:var(--gold); }
+  h1 { color:var(--gold); font-size:1.7rem; margin:14px 0 6px; }
+  .from { color:var(--muted); margin:0 0 24px; }
+  .from strong { color:var(--ink); }
+  .verse { background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:18px 22px; margin:0 auto 28px; }
+  .verse p { margin:0; }
+  .verse .ref { color:var(--muted); margin-top:8px; font-size:.9rem; }
+  .btns { display:flex; flex-direction:column; gap:10px; align-items:center; }
+  .btn { display:inline-block; min-width:240px; padding:11px 22px; border-radius:999px;
+    text-decoration:none; cursor:pointer; font:inherit; }
+  .btn.primary { background:var(--gold); color:#fff; border:1px solid var(--gold); }
+  .btn.ghost { background:transparent; color:var(--gold); border:1px solid var(--gold); }
+  .btn.link { background:none; border:none; color:var(--muted); min-width:0; padding:6px; font-size:.9rem; }
+  .grace-note { color:var(--muted); font-size:.82rem; margin-top:14px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="cross">☦</div>
+    <h1>Pause.</h1>
+    <p class="from">You were headed to <strong id="from">a distracting site</strong>.
+    Is this where you meant to go?</p>
+
+    <div class="verse">
+      <p id="verse-text">—</p>
+      <p class="ref" id="verse-ref"></p>
+    </div>
+
+    <div class="btns">
+      <button class="btn primary" id="start">Open Nofri Start</button>
+      <button class="btn ghost" id="back">Go back</button>
+      <button class="btn link" id="grace">I really need <span id="mins">5</span> minutes here</button>
+    </div>
+    <p class="grace-note">A short pass lets you in, then focus mode resumes.</p>
+  </div>
+  <script src="shared.js"></script>
+  <script src="focus.js"></script>
+</body>
+</html>

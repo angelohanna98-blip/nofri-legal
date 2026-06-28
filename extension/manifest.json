@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Nofri Focus",
+  "version": "0.1.0",
+  "description": "Gently block distracting sites so you can browse with intention. A companion to Nofri Start.",
+  "permissions": ["webNavigation", "tabs", "storage"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "background.js" },
+  "options_page": "options.html",
+  "action": {
+    "default_title": "Nofri Focus",
+    "default_popup": "popup.html"
+  }
+}

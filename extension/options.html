@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nofri Focus — Settings</title>
+<style>
+  :root { --gold:#B07A2A; --ink:#3A3733; --muted:#857B63; --bg:#FAF9F6; --card:#fff; --line:#E8E5DE; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,Georgia,serif; background:var(--bg); color:var(--ink); line-height:1.6; }
+  .wrap { max-width:600px; margin:0 auto; padding:40px 24px 64px; }
+  .cross { font-size:1.8rem; color:var(--gold); text-align:center; }
+  h1 { color:var(--gold); font-size:1.5rem; text-align:center; margin:6px 0 28px; }
+  h2 { color:var(--ink); font-size:1.05rem; margin:26px 0 8px; }
+  a { color:var(--gold); }
+  .row { display:flex; align-items:center; justify-content:space-between; gap:12px;
+    background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin:8px 0; }
+  .row label { font-size:.95rem; }
+  .muted { color:var(--muted); font-size:.85rem; }
+  input[type="number"] { width:72px; padding:6px 8px; border:1px solid var(--line); border-radius:8px; font:inherit; }
+  input[type="text"], input[type="url"] { padding:8px 10px; border:1px solid var(--line); border-radius:8px; font:inherit; width:100%; }
+  ul.list { list-style:none; margin:8px 0; padding:0; }
+  ul.list li { display:flex; justify-content:space-between; align-items:center;
+    border:1px solid var(--line); border-radius:8px; padding:7px 12px; margin:6px 0; background:var(--card); }
+  ul.list .remove { border:none; background:transparent; color:var(--muted); font-size:1.2rem; cursor:pointer; line-height:1; }
+  form.add { display:flex; gap:8px; margin-top:6px; }
+  form.add button { padding:8px 16px; border:1px solid var(--gold); background:var(--gold); color:#fff; border-radius:8px; cursor:pointer; font:inherit; }
+  .switch { position:relative; width:46px; height:26px; }
+  .switch input { opacity:0; width:0; height:0; }
+  .slider { position:absolute; inset:0; background:#ccc; border-radius:999px; transition:.2s; }
+  .slider:before { content:""; position:absolute; height:20px; width:20px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.2s; }
+  .switch input:checked + .slider { background:var(--gold); }
+  .switch input:checked + .slider:before { transform:translateX(20px); }
+  .actions { margin-top:24px; display:flex; gap:10px; }
+  .actions button { padding:8px 16px; border:1px solid var(--gold); color:var(--gold); background:transparent; border-radius:8px; cursor:pointer; font:inherit; }
+  .saved { color:var(--gold); font-size:.85rem; margin-left:8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="cross">☦</div>
+  <h1>Nofri Focus</h1>
+
+  <div class="row">
+    <label for="enabled"><strong>Focus mode</strong><br><span class="muted">Block the sites below</span></label>
+    <span class="switch"><input type="checkbox" id="enabled"><span class="slider"></span></span>
+  </div>
+
+  <div class="row">
+    <label for="graceMinutes">Short-pass length<br><span class="muted">Minutes a "let me in" pass lasts</span></label>
+    <input type="number" id="graceMinutes" min="1" max="120">
+  </div>
+
+  <h2>"Open Nofri Start" goes to</h2>
+  <input type="url" id="startUrl" placeholder="https://…your Nofri Start URL">
+  <p class="muted">Set this to your hosted Nofri Start page (your GitHub Pages URL).</p>
+
+  <h2>Blocked sites</h2>
+  <ul class="list" id="blocklist"></ul>
+  <form class="add" id="add-domain">
+    <input type="text" name="domain" placeholder="e.g. twitter.com" autocomplete="off">
+    <button type="submit">Block</button>
+  </form>
+  <p class="muted">Bare domains only (subdomains are included automatically).</p>
+
+  <div class="actions">
+    <button id="reset" type="button">Reset to defaults</button>
+    <span class="saved" id="saved"></span>
+  </div>
+</div>
+<script src="shared.js"></script>
+<script src="options.js"></script>
+</body>
+</html>
