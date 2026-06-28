@@ -1,0 +1,16 @@
+{
+  "_about": "Icon of the day. Each entry renders via Wikimedia Commons' stable Special:FilePath URL (resolved by file title, served at a sensible width). If an entry has a local \"src\" (e.g. \"art/my-icon.jpg\"), that is used instead — drop your own images into an art/ folder and add entries to use them. The renderer advances to the next entry if an image fails to load.",
+  "_attribution": "Images via Wikimedia Commons; see each entry's page for its licence. Ancient icons are in the public domain; some photographs of mosaics/frescoes are under a Creative Commons licence by the photographer.",
+  "icons": [
+    { "title": "Christ Pantocrator", "note": "Encaustic icon, 6th c., St Catherine's Monastery, Sinai", "file": "Spas_vsederzhitel_sinay.jpg" },
+    { "title": "The Holy Trinity", "note": "Andrei Rublev, c. 1411 (The Hospitality of Abraham)", "file": "Angelsatmamre-trinity-rublev-1410.jpg" },
+    { "title": "The Theotokos of Vladimir", "note": "Byzantine icon, 12th c.", "file": "Vladimirskaya.jpg" },
+    { "title": "The Resurrection (Anastasis)", "note": "Fresco, c. 1320, Chora Church, Constantinople", "file": "Anastasis_fresco,_Chora_Church,_Istanbul.jpg" },
+    { "title": "St John Chrysostom", "note": "Mosaic, Hagia Sophia, Constantinople", "file": "Johnchrysostom.jpg" },
+    { "title": "Christ Pantocrator (Deësis)", "note": "Mosaic, 13th c., Hagia Sophia, Constantinople", "file": "Deesis_mosaic_Hagia_Sophia.jpg" },
+    { "title": "Christ Pantocrator", "note": "Mosaic, Hagia Sophia, Constantinople", "file": "Christ_Pantocrator_mosaic_from_Hagia_Sophia_2744_x_2900_pixels_3.1_MB.jpg" },
+    { "title": "The Transfiguration", "note": "Attributed to Feofan Grek, c. 1403, Tretyakov Gallery", "file": "Transfiguration_by_Feofan_Grek_from_Spaso-Preobrazhensky_Cathedral_in_Pereslavl-Zalessky_(15th_c,_Tretyakov_gallery).jpeg" },
+    { "title": "St Nicholas of Myra", "note": "Russian icon, 1294, by Aleksa Petrov", "file": "Nikola_from_1294.jpg" },
+    { "title": "The Archangel Michael", "note": "Orthodox icon", "file": "Mikharkhangel.jpg" }
+  ]
+}

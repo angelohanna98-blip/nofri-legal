@@ -143,6 +143,50 @@
     }).catch(function () { $("prayer").textContent = ""; });
   }
 
+  // Icon of the day — rotates daily, hotlinked from Wikimedia Commons via the
+  // stable Special:FilePath endpoint. Resilient: if an image fails to load it
+  // advances to the next entry, and the card stays hidden if none load.
+  function commonsUrl(file) {
+    return "https://commons.wikimedia.org/wiki/Special:FilePath/" +
+      encodeURIComponent(file) + "?width=640";
+  }
+  function commonsPage(file) {
+    return "https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(file);
+  }
+
+  function renderIconOfDay(now) {
+    fetch("data/icons.json").then(function (r) { return r.json(); }).then(function (d) {
+      var list = (d && d.icons) || [];
+      if (!list.length) return;
+      var start = Coptic.dayOfYear(now) % list.length;
+      var img = $("icon-img");
+      var tries = 0;
+
+      function show(i) {
+        if (tries >= list.length) return; // every candidate failed; leave hidden
+        tries++;
+        var icon = list[i];
+        var url = icon.src || commonsUrl(icon.file);
+        img.onload = function () {
+          img.alt = icon.title;
+          var cap = $("icon-cap");
+          clear(cap);
+          cap.appendChild(el("div", { class: "icon-title", text: icon.title }));
+          if (icon.note) cap.appendChild(el("div", { text: icon.note }));
+          if (icon.file) {
+            cap.appendChild(el("div", { class: "icon-src" }, [
+              el("a", { href: commonsPage(icon.file), target: "_blank", rel: "noopener", text: "Wikimedia Commons" })
+            ]));
+          }
+          $("icon-card").hidden = false;
+        };
+        img.onerror = function () { show((i + 1) % list.length); };
+        img.src = url;
+      }
+      show(start);
+    }).catch(function () {});
+  }
+
   function renderSaint(coptic) {
     var box = $("saint");
     // Lazy-load the synaxarium after first paint; never block the date.
@@ -591,6 +635,7 @@
     // Bundled-data blocks (fast local fetches).
     renderDailyText(now);
     renderSaint(coptic);
+    renderIconOfDay(now);
 
     // Network blocks — additive, fail quietly.
     renderSports(cfg);
