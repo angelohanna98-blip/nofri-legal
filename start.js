@@ -192,11 +192,30 @@
     return "https://commons.wikimedia.org/wiki/File:" + encodeURIComponent(file);
   }
 
-  function renderIconOfDay(now) {
+  // The saint/feast commemorated today, when we have an icon for it. Keyed by
+  // Coptic civil date ("day month"); the 12th of every Coptic month is the
+  // monthly commemoration of the Archangel Michael.
+  function feastIconFor(coptic) {
+    var map = {
+      "15 Hator": { title: "St Mina the Martyr", file: "Menas.jpg" },
+      "22 Toba": { title: "St Anthony the Great", file: "StAnthony.jpg" },
+      "16 Mesra": { title: "The Dormition of the Theotokos", file: "Vladimirskaya.jpg" },
+      "29 Baramhat": { title: "The Annunciation to the Theotokos", file: "Vladimirskaya.jpg" },
+      "13 Mesra": { title: "The Transfiguration", file: "Transfiguration_by_Feofan_Grek_from_Spaso-Preobrazhensky_Cathedral_in_Pereslavl-Zalessky_(15th_c,_Tretyakov_gallery).jpeg" },
+      "17 Baba": { title: "St John Chrysostom", file: "Johnchrysostom.jpg" }
+    };
+    if (map[coptic.key]) return map[coptic.key];
+    if (coptic.day === 12) return { title: "The Archangel Michael", file: "Mikharkhangel.jpg" };
+    return null;
+  }
+
+  function renderIconOfDay(now, coptic) {
     fetch("data/icons.json").then(function (r) { return r.json(); }).then(function (d) {
       var list = (d && d.icons) || [];
+      var feast = coptic ? feastIconFor(coptic) : null;
+      if (feast) list = [{ title: feast.title, note: "Commemorated today", file: feast.file }].concat(list);
       if (!list.length) return;
-      var start = Coptic.dayOfYear(now) % list.length;
+      var start = feast ? 0 : Coptic.dayOfYear(now) % list.length;
       var img = $("icon-img");
       var tries = 0;
 
@@ -237,18 +256,34 @@
       '<path d="M50 34v22M40 45h20" stroke="#B07A2A" stroke-width="3" fill="none"/>' +
       '</svg>';
   }
-  function renderIconostasis() {
+  function renderIconostasis(coptic) {
     var strip = $("iconostasis");
     if (!strip) return;
+    var feast = coptic ? feastIconFor(coptic) : null;
     fetch("data/saints.json").then(function (r) { return r.json(); }).then(function (d) {
       var saints = (d && d.saints) || [];
+      // If today commemorates one of these saints, move it to the front and
+      // mark it. (Match by file, or add the feast saint if not already present.)
+      if (feast) {
+        var idx = -1;
+        saints = saints.slice();
+        saints.forEach(function (s, i) { if (s.file === feast.file) idx = i; });
+        var featured = idx >= 0 ? saints.splice(idx, 1)[0] : { name: feast.title, file: feast.file };
+        featured.today = true;
+        saints.unshift(featured);
+      }
       saints.forEach(function (s) {
         var arch = el("div", { class: "arch", html: haloSvg() });
         var img = el("img", { alt: s.name });
         img.addEventListener("load", function () { arch.innerHTML = ""; arch.appendChild(img); });
         img.addEventListener("error", function () { /* keep the halo fallback */ });
         img.src = s.src || commonsUrl(s.file);
-        strip.appendChild(el("div", { class: "saint" }, [arch, el("div", { class: "nm", text: s.name })]));
+        var tile = el("div", { class: "saint" + (s.today ? " feast" : "") }, [
+          arch,
+          el("div", { class: "nm", text: s.name }),
+          s.today ? el("div", { class: "today-label", text: "Commemorated today" }) : null
+        ]);
+        strip.appendChild(tile);
       });
     }).catch(function () {});
   }
@@ -932,8 +967,8 @@
     // Bundled-data blocks (fast local fetches).
     renderDailyText(now);
     renderSaint(coptic);
-    renderIconOfDay(now);
-    renderIconostasis();
+    renderIconOfDay(now, coptic);
+    renderIconostasis(coptic);
 
     // Network blocks — additive, fail quietly.
     renderSports(cfg);
