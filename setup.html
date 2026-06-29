@@ -70,15 +70,19 @@
   Listing text and screenshots are included in the <code>extension/</code> folder.</p>
 
   <h2>Part C · Sign in to your calendar</h2>
-  <p>Nofri Start can show your real <strong>Nofri Calendar</strong> events once you sign in (passwordless —
-  you get a one-time link by email). One small one-time setting is needed so sign-in links return to your site:</p>
+  <p>Nofri Start and Nofri Calendar use the <strong>same login as the Nofri app</strong>: your email and
+  password, or <strong>Sign in with Apple</strong>. Just click <strong>Sign in</strong> and use the same
+  credentials. Email + password works right away (no setup needed).</p>
+  <p>Two optional settings, only if you want <em>Sign in with Apple</em> or the “email me a link” option to
+  work on the web:</p>
   <ol>
-    <li>In your <strong>Supabase</strong> project (<code>nofri-calendar</code>), open
-      <strong>Authentication → URL Configuration</strong>.</li>
-    <li>Set <strong>Site URL</strong> to your Nofri Start address, e.g.
-      <code>https://angelohanna98-blip.github.io/nofri-legal/start.html</code>.</li>
-    <li>Add that same URL under <strong>Redirect URLs</strong>, then save.</li>
-    <li>On Nofri Start, click <strong>Sign in</strong>, enter your email, and open the link it sends you.</li>
+    <li>In <strong>Supabase</strong> (<code>nofri-calendar</code>) → <strong>Authentication → URL Configuration</strong>:
+      set <strong>Site URL</strong> and add a <strong>Redirect URL</strong> = your Nofri Start address
+      (e.g. <code>https://angelohanna98-blip.github.io/nofri-legal/start.html</code>).</li>
+    <li>For Apple on the web: in <strong>Authentication → Providers → Apple</strong>, enable it and add a
+      <strong>Services ID</strong> (Apple) with the callback
+      <code>https://yozxgbgohlwnbioosvsg.supabase.co/auth/v1/callback</code>. (The app’s native Apple sign-in
+      is separate from web Apple sign-in.)</li>
   </ol>
   <p class="note">Your events are protected by row-level security — signing in only ever shows you your own
   calendars. Your spiritual practices and start-page settings stay on your device as before.</p>
