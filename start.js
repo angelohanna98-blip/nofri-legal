@@ -714,32 +714,21 @@
       var b = el("button", { class: "ghost-btn", text: "Sign in" });
       b.addEventListener("click", function () {
         body.scrollIntoView({ behavior: "smooth", block: "center" });
-        var inp = $("signin-email"); if (inp) inp.focus();
+        var inp = body.querySelector("input"); if (inp) inp.focus();
       });
       mini.appendChild(b);
 
       clear(body);
-      body.appendChild(el("p", { class: "muted", text: "Sign in to your Nofri account to see your calendar — today’s events and what’s coming up." }));
-      var form = el("form", { class: "signin-row" });
-      var input = el("input", { type: "email", id: "signin-email", placeholder: "you@email.com", required: "", "aria-label": "Email" });
-      form.appendChild(input);
-      form.appendChild(el("button", { class: "btn", type: "submit", text: "Email me a link" }));
-      body.appendChild(form);
-      body.appendChild(el("p", { id: "signin-msg" }));
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        var email = input.value.trim(); if (!email) return;
-        if (!window.NofriAccount || !NofriAccount.available()) {
-          $("signin-msg").textContent = "Account service isn’t reachable right now.";
-          return;
-        }
-        $("signin-msg").textContent = "Sending…";
-        NofriAccount.signIn(email).then(function () {
-          $("signin-msg").textContent = "Check your email for a sign-in link.";
-        }).catch(function () {
-          $("signin-msg").textContent = "Couldn’t send the link. Check your connection and try again.";
-        });
-      });
+      body.appendChild(el("p", { class: "muted", text: "Sign in with your Nofri account to see your calendar — today’s events and what’s coming up." }));
+      var formBox = el("div", { id: "signin-box" });
+      body.appendChild(formBox);
+      var msg = el("p", { id: "signin-msg" });
+      body.appendChild(msg);
+      if (window.NofriAccount && NofriAccount.available()) {
+        NofriAccount.mountSignIn(formBox, function (t) { msg.textContent = t; });
+      } else {
+        formBox.appendChild(el("p", { class: "muted", text: "Account service isn’t reachable right now." }));
+      }
     }
 
     function signedIn(session) {

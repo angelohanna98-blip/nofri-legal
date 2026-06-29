@@ -121,12 +121,9 @@
 
   <div class="panel" id="signin-panel" style="margin-top:16px" hidden>
     <h2 style="margin:0 0 4px;color:var(--gold-deep);font-size:1.05rem">Sign in to see your events</h2>
-    <p class="muted" style="margin:0">The Coptic calendar above works for everyone. Sign in to your Nofri account to see and add your own events.</p>
-    <form class="signin-row" id="signin-form">
-      <input type="email" id="signin-email" placeholder="you@email.com" aria-label="Email" required>
-      <button class="btn" type="submit">Email me a link</button>
-    </form>
-    <p id="signin-msg"></p>
+    <p class="muted" style="margin:0 0 12px">The Coptic calendar above works for everyone. Sign in to your Nofri account to see and add your own events.</p>
+    <div id="signin-box" style="max-width:360px"></div>
+    <p id="signin-msg" style="color:var(--gold-deep);font-size:.88rem"></p>
   </div>
 
   <footer>
@@ -134,7 +131,7 @@
   </footer>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="config.js"></script>
 <script src="coptic.js"></script>
 <script src="nofri-account.js"></script>

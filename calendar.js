@@ -182,15 +182,12 @@
     $("next").addEventListener("click", function () { go(1); });
     $("today-btn").addEventListener("click", function () { view = { y: today.getFullYear(), m: today.getMonth() }; selected = new Date(today); loadEvents(); });
 
-    var form = $("signin-form");
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var email = $("signin-email").value.trim(); if (!email) return;
-      if (!window.NofriAccount || !NofriAccount.available()) { $("signin-msg").textContent = "Account service isn’t reachable right now."; return; }
-      $("signin-msg").textContent = "Sending…";
-      NofriAccount.signIn(email).then(function () { $("signin-msg").textContent = "Check your email for a sign-in link."; })
-        .catch(function () { $("signin-msg").textContent = "Couldn’t send the link. Try again."; });
-    });
+    var box = $("signin-box");
+    if (window.NofriAccount && NofriAccount.available()) {
+      NofriAccount.mountSignIn(box, function (t) { $("signin-msg").textContent = t; });
+    } else if (box) {
+      box.textContent = "Account service isn’t reachable right now.";
+    }
 
     renderMonth();
     renderDayPanel();
