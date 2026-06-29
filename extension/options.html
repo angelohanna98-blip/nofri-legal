@@ -34,6 +34,13 @@
   .actions { margin-top:24px; display:flex; gap:10px; }
   .actions button { padding:8px 16px; border:1px solid var(--gold); color:var(--gold); background:transparent; border-radius:8px; cursor:pointer; font:inherit; }
   .saved { color:var(--gold); font-size:.85rem; margin-left:8px; }
+  .lock-ctrls { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .lock-ctrls select { padding:8px 10px; border:1px solid var(--line); border-radius:8px; font:inherit; background:#fff; }
+  .btn-lock { padding:9px 18px; border:1px solid var(--gold); background:var(--gold); color:#fff; border-radius:8px; cursor:pointer; font:inherit; }
+  .btn-lock:hover { background:#8f5f1e; }
+  .locked-note { color:var(--gold); font-weight:bold; }
+  input:disabled + .slider { opacity:.5; }
+  .is-locked .switch input:disabled + .slider { cursor:not-allowed; }
   #schedule-area { transition:opacity .2s; }
   #schedule-area.disabled { opacity:.45; pointer-events:none; }
   .window-form { display:block; }
@@ -84,6 +91,22 @@
     <p class="muted">Outside these windows, the blocked sites stay blocked. A window whose end time is earlier than its start crosses midnight.</p>
   </div>
 
+  <h2>Protection · explicit content</h2>
+  <div class="row">
+    <label for="protect"><strong>Block explicit content</strong><br><span class="muted">A hard shield — no grace pass, ignores your schedule.</span></label>
+    <span class="switch"><input type="checkbox" id="protect"><span class="slider"></span></span>
+  </div>
+  <div class="row">
+    <label for="safesearch"><strong>Enforce SafeSearch</strong><br><span class="muted">Forces Google, Bing and DuckDuckGo into safe mode.</span></label>
+    <span class="switch"><input type="checkbox" id="safesearch"><span class="slider"></span></span>
+  </div>
+  <ul class="list" id="extra-list"></ul>
+  <form class="add" id="add-extra">
+    <input type="text" name="domain" placeholder="block another site… e.g. example.com" autocomplete="off">
+    <button type="submit">Block</button>
+  </form>
+  <p class="muted">This is the browser layer. For coverage no browser or incognito window can bypass, also set a filtering DNS — see <strong>PROTECT.md</strong> in the extension folder.</p>
+
   <h2>Blocked sites</h2>
   <ul class="list" id="blocklist"></ul>
   <form class="add" id="add-domain">
@@ -91,6 +114,21 @@
     <button type="submit">Block</button>
   </form>
   <p class="muted">Bare domains only (subdomains are included automatically).</p>
+
+  <h2>Commitment lock</h2>
+  <p class="muted" id="lock-status">Not locked.</p>
+  <div class="lock-ctrls" id="lock-ctrls">
+    <select id="lock-dur">
+      <option value="1">1 hour</option>
+      <option value="3">3 hours</option>
+      <option value="12">12 hours</option>
+      <option value="24">1 day</option>
+      <option value="72">3 days</option>
+      <option value="168">1 week</option>
+    </select>
+    <button id="lock-btn" class="btn-lock" type="button">Lock protection on</button>
+  </div>
+  <p class="muted">While locked you can’t turn protection or focus off, remove blocked sites, or shorten the lock — only add more. This makes relapse hard. It is <strong>not</strong> uninstall-proof on its own; PROTECT.md explains how to make it so.</p>
 
   <div class="actions">
     <button id="reset" type="button">Reset to defaults</button>

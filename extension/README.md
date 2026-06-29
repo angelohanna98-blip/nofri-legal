@@ -22,6 +22,13 @@ a short timed pass if you genuinely need a few minutes.
 - **Scheduling (free windows).** Optionally let focus pause itself during
   windows you choose (e.g. weekday evenings 6–9pm). Outside those windows the
   blocklist stays on. Windows are per‑weekday and may cross midnight.
+- **Protection (explicit content).** A harder shield: blocks an explicit‑content
+  list (no grace pass, ignores the schedule) and enforces SafeSearch on Google,
+  Bing and DuckDuckGo.
+- **Commitment lock.** Lock protection on for a chosen duration; until it expires
+  you can't turn it off, remove blocked sites, or shorten the lock. Makes relapse
+  hard. For true *can't‑delete / no‑incognito* enforcement, combine it with the
+  DNS + device‑lock layers in **PROTECT.md**.
 - **Local & private.** All settings live in `chrome.storage.local` on your
   device. No account, no servers, no tracking — same ethos as Nofri Start.
 

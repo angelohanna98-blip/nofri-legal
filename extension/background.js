@@ -21,11 +21,26 @@ chrome.webNavigation.onBeforeNavigate.addListener(function (details) {
   if (u.protocol !== "http:" && u.protocol !== "https:") return; // skip our own pages, about:, etc.
 
   nofriGetSettings().then(function (s) {
-    if (!nofriShouldBlock(u.hostname, s, new Date())) return;
+    // 1) Enforce SafeSearch (a redirect that adds the safe param, not a block).
+    var ss = nofriSafeSearchRedirect(details.url, s);
+    if (ss) { chrome.tabs.update(details.tabId, { url: ss }); return; }
 
-    var target = chrome.runtime.getURL("focus.html") +
-      "?from=" + encodeURIComponent(u.hostname) +
-      "&to=" + encodeURIComponent(details.url);
-    chrome.tabs.update(details.tabId, { url: target });
+    // 2) Explicit-content protection — hard block, no grace pass.
+    if (nofriExplicitBlocked(u.hostname, s)) {
+      chrome.tabs.update(details.tabId, {
+        url: chrome.runtime.getURL("focus.html") +
+          "?reason=protected&from=" + encodeURIComponent(u.hostname)
+      });
+      return;
+    }
+
+    // 3) The focus blocklist (respects grace pass + schedule).
+    if (nofriShouldBlock(u.hostname, s, new Date())) {
+      chrome.tabs.update(details.tabId, {
+        url: chrome.runtime.getURL("focus.html") +
+          "?from=" + encodeURIComponent(u.hostname) +
+          "&to=" + encodeURIComponent(details.url)
+      });
+    }
   });
 });

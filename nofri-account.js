@@ -86,6 +86,19 @@
       .then(function (r) { return (r && r.data) || []; });
   }
 
+  // Events overlapping the [startIso, endIso) window (for the calendar month view).
+  function getEventsBetween(startIso, endIso) {
+    var c = getClient();
+    if (!c) return Promise.resolve([]);
+    return c.from("events")
+      .select("id,title,location,start_at,end_at,is_all_day,color,calendar_id,calendars(name,color)")
+      .is("deleted_at", null)
+      .lt("start_at", endIso)
+      .gte("end_at", startIso)
+      .order("start_at", { ascending: true })
+      .then(function (r) { return (r && r.data) || []; });
+  }
+
   // Insert a new event. opts: { title, startAt, endAt, isAllDay, calendarId }.
   function addEvent(opts) {
     var c = getClient();
@@ -115,6 +128,7 @@
     currentUser: currentUser,
     getCalendars: getCalendars,
     getUpcomingEvents: getUpcomingEvents,
+    getEventsBetween: getEventsBetween,
     addEvent: addEvent
   };
 })(typeof window !== "undefined" ? window : this);

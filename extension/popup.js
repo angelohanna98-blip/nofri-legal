@@ -8,22 +8,29 @@
   function $(id) { return document.getElementById(id); }
 
   function refresh(s) {
+    var locked = nofriIsLocked(s, Date.now());
     $("enabled").checked = !!s.enabled;
-    if (!s.enabled) {
-      $("status").textContent = "Focus off";
+    $("enabled").disabled = locked;
+    var protect = s.protection && s.protection.enabled ? " · 🛡 protected" : "";
+    if (locked) {
+      $("status").textContent = "🔒 Locked until " + new Date(s.lock.until).toLocaleString() + protect;
+    } else if (!s.enabled) {
+      $("status").textContent = "Focus off" + protect;
     } else if (nofriInFreeWindow(s.schedule, new Date())) {
-      $("status").textContent = "Free time · focus paused by schedule";
+      $("status").textContent = "Free time · focus paused by schedule" + protect;
     } else {
-      $("status").textContent = "Focus on · " + s.blocklist.length + " sites blocked";
+      $("status").textContent = "Focus on · " + s.blocklist.length + " sites blocked" + protect;
     }
   }
 
   nofriGetSettings().then(function (s) {
     refresh(s);
     $("enabled").addEventListener("change", function () {
-      var enabled = $("enabled").checked;
-      chrome.storage.local.set({ enabled: enabled }).then(function () {
-        nofriGetSettings().then(refresh);
+      nofriGetSettings().then(function (cur) {
+        if (nofriIsLocked(cur, Date.now())) { $("enabled").checked = true; return; } // can't disable while locked
+        chrome.storage.local.set({ enabled: $("enabled").checked }).then(function () {
+          nofriGetSettings().then(refresh);
+        });
       });
     });
   });
