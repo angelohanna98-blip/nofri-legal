@@ -27,8 +27,27 @@ var NOFRI_DEFAULTS = {
   // = focus is on EXCEPT during the "allow" free windows below, when the
   // blocklist is suspended. Each window: { days:[0..6 (Sun..Sat)], start, end }
   // with start/end as "HH:MM" (24h). A window with start > end crosses midnight.
-  schedule: { mode: "always", allow: [] }
+  schedule: { mode: "always", allow: [] },
+  // Protection — the always-on, harder shield for explicit/harmful content.
+  // Unlike the focus blocklist, this ignores the grace pass and the schedule.
+  protection: { enabled: false, safeSearch: true, blockExplicit: true, extra: [] },
+  // Commitment lock. While Date.now() < lock.until, the UI will not let you
+  // turn protection or focus OFF, remove blocked sites, or shorten the lock.
+  // (A lock makes relapse hard; it is not uninstall-proof — see PROTECT.md.)
+  lock: { until: 0 }
 };
+
+// Seed list of well-known explicit domains. This is a STARTER set for the
+// browser layer; comprehensive coverage comes from the DNS layer documented in
+// PROTECT.md (e.g. Cloudflare for Families 1.1.1.3 / CleanBrowsing).
+var NOFRI_EXPLICIT_SITES = [
+  "pornhub.com", "xvideos.com", "xnxx.com", "xhamster.com", "redtube.com",
+  "youporn.com", "spankbang.com", "onlyfans.com", "chaturbate.com", "brazzers.com",
+  "stripchat.com", "rule34.xxx", "e621.net"
+];
+// High-precision tokens matched against the HOSTNAME only (kept tight to avoid
+// false positives like "essex" or "scunthorpe").
+var NOFRI_EXPLICIT_TOKENS = ["porn", "xxx", "xvideos", "xnxx", "xhamster", "hentai", "camgirl", "camsex", "nsfw"];
 
 function nofriNormalizeHost(host) {
   return String(host || "").toLowerCase().replace(/^www\./, "");
@@ -93,4 +112,41 @@ function nofriShouldBlock(host, settings, now) {
   if (nofriInFreeWindow(settings.schedule, now)) return false;
   if (nofriHasGrace(host, settings.grace, now.getTime())) return false;
   return true;
+}
+
+// Is the commitment lock currently active?
+function nofriIsLocked(settings, nowMs) {
+  return !!(settings && settings.lock && settings.lock.until > nowMs);
+}
+
+// Explicit-content block — always on when protection is enabled, and NOT
+// bypassable by the grace pass or schedule. Matches the seed list, the user's
+// extra domains, and high-precision tokens in the hostname.
+function nofriExplicitBlocked(host, settings) {
+  var p = settings && settings.protection;
+  if (!p || !p.enabled || !p.blockExplicit) return false;
+  var h = nofriNormalizeHost(host);
+  var list = (typeof NOFRI_EXPLICIT_SITES !== "undefined" ? NOFRI_EXPLICIT_SITES : []).concat(p.extra || []);
+  if (list.some(function (d) { d = nofriNormalizeHost(d); return d && (h === d || h.endsWith("." + d)); })) return true;
+  var tokens = (typeof NOFRI_EXPLICIT_TOKENS !== "undefined" ? NOFRI_EXPLICIT_TOKENS : []);
+  return tokens.some(function (t) { return h.indexOf(t) !== -1; });
+}
+
+// Enforce SafeSearch on the major engines by adding the safe parameter when
+// protection is on. Returns a redirect URL string, or null if no change needed.
+function nofriSafeSearchRedirect(rawUrl, settings) {
+  var p = settings && settings.protection;
+  if (!p || !p.enabled || !p.safeSearch) return null;
+  var u;
+  try { u = new URL(rawUrl); } catch (e) { return null; }
+  var host = nofriNormalizeHost(u.hostname);
+  function ensure(param, value) {
+    if (u.searchParams.get(param) === value) return null;
+    u.searchParams.set(param, value);
+    return u.toString();
+  }
+  if (/(^|\.)google\./.test(host) && u.pathname.indexOf("/search") === 0) return ensure("safe", "active");
+  if (host.indexOf("bing.com") !== -1 && u.pathname.indexOf("/search") === 0) return ensure("adlt", "strict");
+  if (host.indexOf("duckduckgo.com") !== -1) return ensure("kp", "1");
+  return null;
 }

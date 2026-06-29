@@ -35,11 +35,21 @@
 
   var from = param("from");
   var to = param("to");
+  var protectedBlock = param("reason") === "protected";
 
   if (from) document.getElementById("from").textContent = from;
   var v = pickVerse();
   document.getElementById("verse-text").textContent = "“" + v.text + "”";
   document.getElementById("verse-ref").textContent = "— " + v.ref;
+
+  // For a protection block, firm up the message and remove the grace pass.
+  if (protectedBlock) {
+    var h1 = document.querySelector("h1"); if (h1) h1.textContent = "Blocked.";
+    var fromP = document.querySelector(".from");
+    if (fromP) fromP.textContent = "Nofri Protect blocked this site. Turn to something good.";
+    var graceBtn = document.getElementById("grace"); if (graceBtn) graceBtn.style.display = "none";
+    var note = document.querySelector(".grace-note"); if (note) note.style.display = "none";
+  }
 
   nofriGetSettings().then(function (s) {
     document.getElementById("mins").textContent = s.graceMinutes;

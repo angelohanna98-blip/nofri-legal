@@ -29,8 +29,14 @@
 
   .wrap { max-width:1000px; margin:0 auto; padding:30px 20px 90px; }
 
-  /* ---- account strip ---- */
-  .account-strip { display:flex; justify-content:flex-end; min-height:30px; }
+  /* ---- top nav ---- */
+  .account-strip { display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:34px; }
+  .nav-left { display:flex; align-items:center; gap:8px; }
+  .nav-left .bcross { color:var(--gold); font-size:1.2rem; }
+  .nav-left b { color:var(--gold-deep); font-size:1.02rem; }
+  .nav-cal { color:var(--gold-deep); text-decoration:none; padding:6px 16px; border-radius:999px; font-size:.92rem;
+    background:rgba(255,255,255,.62); border:1px solid var(--line); backdrop-filter:blur(8px); transition:.16s; }
+  .nav-cal:hover { background:var(--gold); color:#fff; border-color:var(--gold); }
   .ghost-btn { background:rgba(255,255,255,.6); border:1px solid var(--line); color:var(--gold-deep);
     border-radius:999px; padding:7px 16px; font:inherit; font-size:.9rem; cursor:pointer; backdrop-filter:blur(8px); }
   .ghost-btn:hover { background:#fff; }
@@ -171,8 +177,12 @@
 
 <div class="wrap">
 
-  <!-- account strip -->
+  <!-- top nav -->
   <div class="account-strip">
+    <div class="nav-left">
+      <span class="bcross">☦</span><b>Nofri</b>
+      <a class="nav-cal" href="calendar.html">📅 Calendar</a>
+    </div>
     <div id="account-mini"></div>
   </div>
 
