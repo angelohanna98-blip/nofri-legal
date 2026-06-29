@@ -36,7 +36,7 @@
       { name: "BBC Sport", feedUrl: "https://feeds.bbci.co.uk/sport/rss.xml", max: 3 }
     ],
     links: [
-      { label: "Nofri Calendar", url: "calendar.html" },
+      { label: "Nofri Calendar", url: "https://nofri-calendar.vercel.app/" },
       { label: "Holy Bible", url: "https://www.biblegateway.com" },
       { label: "Coptic Readings", url: "https://www.copticchurch.net/readings" },
       { label: "Agpeya — Hours", url: "https://agpeya.org" }
