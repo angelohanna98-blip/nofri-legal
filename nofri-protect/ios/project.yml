@@ -1,0 +1,35 @@
+# XcodeGen project for Nofri Protect (iOS).
+# Generate the Xcode project from this file:  brew install xcodegen && xcodegen
+name: NofriProtect
+options:
+  bundleIdPrefix: app.nofri
+  deploymentTarget:
+    iOS: "15.0"
+settings:
+  base:
+    DEVELOPMENT_TEAM: ""            # ← set your Apple Developer Team ID
+    CODE_SIGN_STYLE: Automatic
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.0"
+targets:
+  NofriProtect:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources/App
+      - path: Resources
+    info:
+      path: Sources/App/Info.plist
+      properties:
+        CFBundleDisplayName: Nofri Protect
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+    entitlements:
+      path: Sources/App/NofriProtect.entitlements
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.nofri.protect
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait"
+        TARGETED_DEVICE_FAMILY: "1,2"

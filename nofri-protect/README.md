@@ -50,7 +50,11 @@ Nofri Protect → Remove (requires the passcode if locked above).
 DNS profile above + the **Nofri Focus** browser extension (desktop: explicit
 blocklist, enforced SafeSearch, commitment lock) + Screen Time lock.
 
-**Phase 1: Nofri Protect for iOS (native app).**
+**Phase 1: Nofri Protect for iOS (native app).** 🛠️ *Scaffold started — see
+[`ios/`](ios/).* A SwiftUI app that installs system‑wide encrypted family‑safe
+DNS (`NEDNSSettingsManager`), with a **commitment lock** and an **accountability
+partner**. Open it with `xcodegen && open NofriProtect.xcodeproj` (details in
+`ios/README.md`).
 - A **Network Extension content filter** (`NEFilterDataProvider`) + DNS proxy so
   filtering, categories, and the allow/block lists live in one Nofri app.
 - A **commitment lock** and an **accountability partner** (invite + reports +

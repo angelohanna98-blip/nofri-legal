@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Required so the app can configure system-wide encrypted DNS
+       (NEDNSSettingsManager). You may need to enable the Network Extensions
+       capability for your App ID in the Apple Developer portal. -->
+  <key>com.apple.developer.networking.networkextension</key>
+  <array>
+    <string>dns-settings</string>
+  </array>
+  <!-- Shared storage between the app and (future) filter extension. -->
+  <key>com.apple.security.application-groups</key>
+  <array>
+    <string>group.app.nofri.protect</string>
+  </array>
+</dict>
+</plist>

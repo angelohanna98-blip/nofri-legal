@@ -1,0 +1,9 @@
+{
+  "_about": "Seed explicit-content blocklist shared by the app and a future content-filter extension. The system DNS filter (Cloudflare for Families) is the primary block; this list is for app-level category management and reporting.",
+  "explicitSites": [
+    "pornhub.com", "xvideos.com", "xnxx.com", "xhamster.com", "redtube.com",
+    "youporn.com", "spankbang.com", "onlyfans.com", "chaturbate.com",
+    "brazzers.com", "stripchat.com"
+  ],
+  "explicitTokens": ["porn", "xxx", "xvideos", "xnxx", "xhamster", "hentai", "camgirl", "camsex", "nsfw"]
+}
