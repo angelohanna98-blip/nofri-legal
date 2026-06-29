@@ -19,7 +19,15 @@
     if (client) return client;
     if (!global.supabase || !cfg().supabaseUrl || !cfg().supabaseAnonKey) return null;
     client = global.supabase.createClient(cfg().supabaseUrl, cfg().supabaseAnonKey, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        // Implicit flow returns the token in the URL hash on redirect, with no
+        // PKCE code-verifier to lose — far more reliable for a static site that
+        // a magic link or Apple redirect may return to in a fresh context.
+        flowType: "implicit"
+      }
     });
     return client;
   }
@@ -34,13 +42,19 @@
   }
 
   // Watch auth state; onChange(session|null) fires now and on every change.
+  // We rely on onAuthStateChange (which emits INITIAL_SESSION once the client
+  // has processed any token in the URL) as the single source of truth, so a
+  // slow getSession() can't race and overwrite a just-detected sign-in.
   function init(onChange) {
     var c = getClient();
     if (!c) { onChange(null); return; }
-    c.auth.getSession().then(function (res) {
-      onChange(res && res.data ? res.data.session : null);
+    c.auth.onAuthStateChange(function (_event, session) {
+      onChange(session || null);
+      // Tidy the address bar after a redirect sign-in.
+      if (session && (location.hash.indexOf("access_token") !== -1 || /[?&]code=/.test(location.search))) {
+        try { history.replaceState(null, "", location.pathname); } catch (e) {}
+      }
     });
-    c.auth.onAuthStateChange(function (_event, session) { onChange(session || null); });
   }
 
   function redirectUrl() { return location.href.split("#")[0]; }
