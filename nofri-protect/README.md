@@ -67,9 +67,14 @@ partner**. Open it with `xcodegen && open NofriProtect.xcodeproj` (details in
 A `VpnService` that filters DNS/traffic locally, set as **Device Owner** so it
 can't be disabled.
 
-**Phase 3: Nofri accountability backend.**
-Partner invites, weekly reports, real-time "filter was turned off" alerts —
-the relationship layer that makes any of this actually stick.
+**Phase 3: Nofri accountability backend.** ✅ *Ingest live.*
+A Supabase Edge Function (`protect-report`) + `protect_reports` table now records
+every event (enabled / disabled / locked / bypassAttempt) the app sends. The iOS
+app posts to it automatically once a partner email is set. To turn on **emails to
+the partner**, set two secrets on the Supabase project:
+`RESEND_API_KEY` (a [Resend](https://resend.com) key) and optionally
+`NOFRI_INGEST_KEY` (a shared key; put the same value in the app's
+`Accountability.ingestKey` to stop spam). Next: partner invites + weekly digests.
 
 ---
 
