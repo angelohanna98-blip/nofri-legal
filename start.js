@@ -53,6 +53,7 @@
       newsService: "rss2json", cacheTtlMin: 60,
       greeting: "Nophri — good day. Begin here, not in the feed.",
       searchEngine: "google",
+      theme: "dawn",
       show: {} // section key -> false to hide; missing/true = shown
     }
   };
@@ -578,6 +579,7 @@
   // which sections are shown).
   function applyDisplay(cfg) {
     var p = cfg.prefs || {};
+    document.body.setAttribute("data-theme", p.theme || "dawn");
     var g = $("greeting"); if (g && p.greeting != null) g.textContent = p.greeting;
     var form = document.querySelector("form.search");
     if (form) {
@@ -596,6 +598,7 @@
     var p = cfg.prefs;
     if ($("set-greeting")) $("set-greeting").value = p.greeting || "";
     if ($("set-search")) $("set-search").value = p.searchEngine || "google";
+    if ($("set-theme")) $("set-theme").value = p.theme || "dawn";
     var box = $("section-toggles");
     if (!box) return;
     clear(box);
@@ -653,6 +656,8 @@
     if (gi) gi.addEventListener("input", function () { cfg.prefs.greeting = gi.value; saveConfig(cfg); applyDisplay(cfg); });
     var se = $("set-search");
     if (se) se.addEventListener("change", function () { cfg.prefs.searchEngine = se.value; saveConfig(cfg); applyDisplay(cfg); });
+    var th = $("set-theme");
+    if (th) th.addEventListener("change", function () { cfg.prefs.theme = th.value; saveConfig(cfg); applyDisplay(cfg); });
 
     // Simple path: add a team by name (resolved via TheSportsDB at load time).
     $("add-team").addEventListener("submit", function (e) {

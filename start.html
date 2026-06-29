@@ -10,20 +10,30 @@
     --gold:#B07A2A; --gold-deep:#8f5f1e; --ink:#34302b; --muted:#6f6657;
     --line:rgba(120,100,70,.18); --card:rgba(255,255,255,.72); --card-solid:#fff;
     --shadow:0 10px 30px rgba(60,50,35,.12); --radius:16px;
+    /* themeable */
+    --bg-grad:linear-gradient(180deg,#f7ddbb 0%,#f0c8a6 26%,#cdc0bf 52%,#a7bccb 74%,#8aa6b8 100%);
+    --mtn-opacity:.85; --on-bg:#2c2823; --on-bg-soft:#5a5147;
   }
+  /* themes */
+  body[data-theme="twilight"] {
+    --bg-grad:linear-gradient(180deg,#1b2a45,#26415e 55%,#34566f);
+    --mtn-opacity:.45; --on-bg:#efe3c8; --on-bg-soft:#cdbf9e; --gold:#e7b85f; --gold-deep:#edd09a;
+    --card:rgba(255,255,255,.78);
+  }
+  body[data-theme="parchment"] { --bg-grad:radial-gradient(circle at 50% 0,#fbf4e2,#efe1c4); --mtn-opacity:0; }
+  body[data-theme="garden"] { --bg-grad:linear-gradient(180deg,#e0eaca,#bcd2a6 55%,#9cc088); --mtn-opacity:.7; --on-bg-soft:#46522f; }
   * { box-sizing:border-box; }
   html, body { height:100%; }
   body {
     margin:0; font-family:-apple-system,Georgia,serif; color:var(--ink); line-height:1.6;
     min-height:100%;
   }
-  /* ---- layered dawn background ---- */
-  .bg { position:fixed; inset:0; z-index:-2;
-    background:linear-gradient(180deg,#f7ddbb 0%,#f0c8a6 26%,#cdc0bf 52%,#a7bccb 74%,#8aa6b8 100%); }
+  /* ---- layered themeable background ---- */
+  .bg { position:fixed; inset:0; z-index:-2; background:var(--bg-grad); }
   .bg-sun { position:fixed; left:50%; top:14vh; width:340px; height:340px; transform:translateX(-50%);
     z-index:-2; border-radius:50%; background:radial-gradient(circle,rgba(255,241,214,.95),rgba(255,224,178,.5) 45%,transparent 70%);
     filter:blur(2px); }
-  .bg-mtn { position:fixed; left:0; right:0; bottom:0; z-index:-1; width:100%; height:40vh; opacity:.85; }
+  .bg-mtn { position:fixed; left:0; right:0; bottom:0; z-index:-1; width:100%; height:40vh; opacity:var(--mtn-opacity); }
   /* divine light behind the header */
   .bg-rays { position:fixed; left:50%; top:9vh; width:min(820px,128vw); height:min(820px,128vw);
     transform:translate(-50%,-50%); z-index:-2; pointer-events:none; border-radius:50%;
@@ -65,6 +75,7 @@
   /* gold cross divider */
   .divider { display:flex; align-items:center; gap:14px; max-width:560px; margin:34px auto 2px; color:var(--gold); }
   .divider::before, .divider::after { content:""; flex:1; height:1px; background:linear-gradient(90deg,transparent,rgba(176,122,42,.55),transparent); }
+  .divider span { color:var(--gold); font-size:1.15rem; text-shadow:0 1px 4px rgba(176,122,42,.4); }
   @media (prefers-reduced-motion:no-preference){ .bg-sun{ animation:glow 9s ease-in-out infinite alternate; } }
   @keyframes glow { from{opacity:.75;} to{opacity:1;} }
 
@@ -85,8 +96,8 @@
   /* ---- header ---- */
   header.hero { text-align:center; margin-top:6px; }
   .cross { font-size:2.3rem; color:var(--gold); text-shadow:0 2px 12px rgba(176,122,42,.35); }
-  .greeting { color:var(--muted); font-size:1.05rem; margin:4px 0 12px; }
-  #date-greg { font-size:1.8rem; color:#2c2823; }
+  .greeting { color:var(--on-bg-soft); font-size:1.05rem; margin:4px 0 12px; }
+  #date-greg { font-size:1.8rem; color:var(--on-bg); }
   #date-coptic { color:var(--gold-deep); font-size:1.08rem; margin-top:2px; }
   #fast-pill { display:inline-block; margin-top:12px; padding:6px 16px; border-radius:999px;
     background:rgba(255,255,255,.6); border:1px solid var(--line); font-size:.92rem; backdrop-filter:blur(8px); }
@@ -172,7 +183,7 @@
 
   /* ---- links / focus ---- */
   .links { text-align:center; }
-  .focus-note { color:#4a5159; font-size:.92rem; margin:0 auto 14px; max-width:580px; text-align:center; text-shadow:0 1px 2px rgba(255,255,255,.6); }
+  .focus-note { color:var(--on-bg-soft); font-size:.92rem; margin:0 auto 14px; max-width:580px; text-align:center; text-shadow:0 1px 2px rgba(255,255,255,.6); }
   #links a.pill, .pill { display:inline-block; margin:6px 8px; color:var(--gold-deep); text-decoration:none;
     border:1px solid var(--gold); border-radius:999px; padding:8px 20px; background:rgba(255,255,255,.55); transition:.18s; }
   #links a.pill:hover { background:var(--gold); color:#fff; transform:translateY(-2px); }
@@ -180,7 +191,7 @@
   /* ---- sports + news ---- */
   .block-title { color:var(--gold-deep); font-size:1.05rem; margin:0 0 12px; text-align:center;
     text-shadow:0 1px 3px rgba(255,255,255,.7); }
-  #sports > p, #news > p { text-align:center; color:#46505a; text-shadow:0 1px 2px rgba(255,255,255,.65); }
+  #sports > p, #news > p { text-align:center; color:var(--on-bg-soft); text-shadow:0 1px 2px rgba(255,255,255,.65); }
   .sport-line { margin:4px 0; } .sport-label { display:inline-block; min-width:42px; color:var(--muted); font-size:.85rem; }
   .news-list { margin:0; padding-left:1.1em; } .news-list li { margin:6px 0; }
   .news-list a { text-decoration:none; color:var(--gold-deep); } .news-list a:hover { text-decoration:underline; }
@@ -310,6 +321,8 @@
     </div>
   </div>
 
+  <div class="divider"><span>☩</span></div>
+
   <!-- quick links / focus -->
   <section class="links" id="links-section" style="margin-top:30px">
     <h2 class="block-title">Where you meant to go</h2>
@@ -318,11 +331,15 @@
     <div id="links"></div>
   </section>
 
+  <div class="divider"><span>☩</span></div>
+
   <!-- sports -->
   <section id="sports-section" style="margin-top:30px">
     <h2 class="block-title">Your teams</h2>
     <div id="sports" class="grid two"></div>
   </section>
+
+  <div class="divider"><span>☩</span></div>
 
   <!-- news -->
   <section id="news-section" style="margin-top:30px">
@@ -351,6 +368,15 @@
     <div class="field-row">
       <label for="set-greeting">Greeting</label>
       <input type="text" id="set-greeting" autocomplete="off" placeholder="Nophri — good day…">
+    </div>
+    <div class="field-row">
+      <label for="set-theme">Theme</label>
+      <select id="set-theme">
+        <option value="dawn">Mountain dawn</option>
+        <option value="twilight">Twilight &amp; gold</option>
+        <option value="parchment">Illuminated parchment</option>
+        <option value="garden">Sacred garden</option>
+      </select>
     </div>
     <div class="field-row">
       <label for="set-search">Search engine</label>
