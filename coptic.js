@@ -89,6 +89,34 @@
     return Math.floor(diff / 86400000);
   }
 
+  // Fasting status for a day, computed only from rules we can assert with
+  // confidence. We never claim "not fasting": the movable fasts (Great Lent,
+  // the Apostles' Fast, the Fast of Nineveh) depend on Pascha and are NOT
+  // computed here, so on those days this returns { fasting: null } and the UI
+  // simply says nothing rather than something wrong.
+  function fastInfo(coptic, date) {
+    var m = coptic.month, d = coptic.day;
+    // Nativity (Advent) Fast: 16 Hathor (m3) .. 28 Koiak (m4); 29 Koiak is the feast.
+    if ((m === 3 && d >= 16) || (m === 4 && d <= 28)) {
+      return { fasting: true, label: "The Nativity Fast", note: "The Advent fast before the Nativity" };
+    }
+    // Dormition (St Mary's) Fast: 1..15 Mesori (m12); 16 Mesori is the feast.
+    if (m === 12 && d >= 1 && d <= 15) {
+      return { fasting: true, label: "The Dormition Fast", note: "The fast of the Theotokos" };
+    }
+    // Great feasts that break even the weekly fast: the Nativity (29 Koiak)
+    // and Theophany (11 Tobi). Make no fasting claim on these days.
+    if ((m === 4 && d === 29) || (m === 5 && d === 11)) {
+      return { fasting: null, label: "", note: "" };
+    }
+    // Weekly Wednesday / Friday fast (outside the fast-free seasons, which are
+    // movable and not computed here).
+    var dow = date.getDay();
+    if (dow === 3) return { fasting: true, label: "Wednesday fast", note: "A weekly fast day" };
+    if (dow === 5) return { fasting: true, label: "Friday fast", note: "A weekly fast day" };
+    return { fasting: null, label: "", note: "" };
+  }
+
   var Coptic = {
     EPOCH_JDN: COPTIC_EPOCH_JDN,
     MONTHS: MONTHS,
@@ -96,7 +124,8 @@
     gregorianToJDN: gregorianToJDN,
     toCoptic: toCoptic,
     isCopticLeapYear: isCopticLeapYear,
-    dayOfYear: dayOfYear
+    dayOfYear: dayOfYear,
+    fastInfo: fastInfo
   };
 
   // Expose for both browser (window.Coptic) and any module consumer.

@@ -124,6 +124,18 @@
     $("date-coptic").textContent =
       coptic.day + " " + coptic.monthName + " " + coptic.year +
       " · Year of the Martyrs";
+
+    // Fast/feast pill — only shown when we can say something confident.
+    var fi = Coptic.fastInfo ? Coptic.fastInfo(coptic, now) : { fasting: null };
+    var pill = $("fast-pill");
+    if (pill && fi.fasting) {
+      pill.textContent = "";
+      pill.appendChild(el("span", { class: "dot", text: "☩ " }));
+      pill.appendChild(document.createTextNode(fi.label + (fi.note ? " · " + fi.note : "")));
+      pill.hidden = false;
+    } else if (pill) {
+      pill.hidden = true;
+    }
   }
 
   function renderDailyText(now) {
@@ -620,6 +632,198 @@
   }
 
   // ════════════════════════════════════════════════════════════════════════
+  // Nofri account + calendar (Supabase, via nofri-account.js)
+  // ════════════════════════════════════════════════════════════════════════
+  function sameDay(a, b) {
+    return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  }
+  function eventTime(ev) {
+    if (ev.is_all_day) return "All day";
+    return new Date(ev.start_at).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+  }
+  function dayLabel(d, now) {
+    if (sameDay(d, now)) return "Today";
+    var tom = new Date(now); tom.setDate(now.getDate() + 1);
+    if (sameDay(d, tom)) return "Tomorrow";
+    return d.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" });
+  }
+
+  function renderEvents(box, events) {
+    var now = new Date();
+    if (!events.length) {
+      box.appendChild(el("p", { class: "muted", text: "Nothing on your calendar coming up. Enjoy the quiet." }));
+      return;
+    }
+    var lastLabel = null;
+    events.forEach(function (ev) {
+      var label = dayLabel(new Date(ev.start_at), now);
+      if (label !== lastLabel) {
+        box.appendChild(el("div", { class: "day-head", text: label }));
+        lastLabel = label;
+      }
+      var meta = [];
+      if (ev.calendars && ev.calendars.name) meta.push(ev.calendars.name);
+      if (ev.location) meta.push(ev.location);
+      box.appendChild(el("div", { class: "event" }, [
+        el("div", { class: "when", text: eventTime(ev) }),
+        el("div", { class: "what" }, [
+          el("div", { class: "ttl", text: ev.title || "(untitled)" }),
+          meta.length ? el("div", { class: "meta", text: meta.join(" · ") }) : null
+        ])
+      ]));
+    });
+  }
+
+  function renderQuickAdd(box, cals, reload) {
+    if (!cals.length) {
+      box.appendChild(el("p", { class: "muted", style: "margin-top:14px", text: "Create a calendar in the Nofri app to add events here." }));
+      return;
+    }
+    var form = el("form", { class: "qa" });
+    var title = el("input", { name: "title", placeholder: "Add an event…", autocomplete: "off" });
+    var when = el("input", { name: "when", type: "datetime-local", "aria-label": "When" });
+    var sel = el("select", { name: "cal", "aria-label": "Calendar" });
+    cals.forEach(function (c) { sel.appendChild(el("option", { value: c.id, text: c.name })); });
+    var btn = el("button", { class: "btn small", type: "submit", text: "Add" });
+    form.appendChild(title); form.appendChild(when); form.appendChild(sel); form.appendChild(btn);
+    box.appendChild(form);
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!title.value.trim() || !when.value) return;
+      var start = new Date(when.value);
+      var end = new Date(start.getTime() + 3600000);
+      btn.disabled = true; btn.textContent = "Adding…";
+      NofriAccount.addEvent({
+        title: title.value.trim(), calendarId: sel.value,
+        startAt: start.toISOString(), endAt: end.toISOString(), isAllDay: false
+      }).then(function () { reload(); }).catch(function () {
+        btn.disabled = false; btn.textContent = "Add";
+        box.appendChild(el("p", { class: "muted", text: "Couldn’t add that event." }));
+      });
+    });
+  }
+
+  function renderAccount() {
+    var mini = $("account-mini"), body = $("account-body"), nameEl = $("account-name");
+    if (!body) return;
+
+    function signedOut() {
+      nameEl.textContent = "";
+      clear(mini);
+      var b = el("button", { class: "ghost-btn", text: "Sign in" });
+      b.addEventListener("click", function () {
+        body.scrollIntoView({ behavior: "smooth", block: "center" });
+        var inp = $("signin-email"); if (inp) inp.focus();
+      });
+      mini.appendChild(b);
+
+      clear(body);
+      body.appendChild(el("p", { class: "muted", text: "Sign in to your Nofri account to see your calendar — today’s events and what’s coming up." }));
+      var form = el("form", { class: "signin-row" });
+      var input = el("input", { type: "email", id: "signin-email", placeholder: "you@email.com", required: "", "aria-label": "Email" });
+      form.appendChild(input);
+      form.appendChild(el("button", { class: "btn", type: "submit", text: "Email me a link" }));
+      body.appendChild(form);
+      body.appendChild(el("p", { id: "signin-msg" }));
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var email = input.value.trim(); if (!email) return;
+        if (!window.NofriAccount || !NofriAccount.available()) {
+          $("signin-msg").textContent = "Account service isn’t reachable right now.";
+          return;
+        }
+        $("signin-msg").textContent = "Sending…";
+        NofriAccount.signIn(email).then(function () {
+          $("signin-msg").textContent = "Check your email for a sign-in link.";
+        }).catch(function () {
+          $("signin-msg").textContent = "Couldn’t send the link. Check your connection and try again.";
+        });
+      });
+    }
+
+    function signedIn(session) {
+      var user = session.user || {};
+      clear(mini);
+      var out = el("button", { class: "ghost-btn", text: "Sign out" });
+      out.addEventListener("click", function () { NofriAccount.signOut(); });
+      mini.appendChild(out);
+      nameEl.textContent = user.email || "";
+
+      function load() {
+        clear(body);
+        body.appendChild(el("p", { class: "muted skel", text: "Loading your calendar…" }));
+        Promise.all([NofriAccount.getUpcomingEvents(12), NofriAccount.getCalendars()]).then(function (res) {
+          clear(body);
+          renderEvents(body, res[0] || []);
+          renderQuickAdd(body, res[1] || [], load);
+        }).catch(function () {
+          clear(body);
+          body.appendChild(el("p", { class: "muted", text: "Couldn’t load your calendar right now." }));
+        });
+      }
+      load();
+    }
+
+    if (!window.NofriAccount) { signedOut(); return; }
+    NofriAccount.init(function (session) {
+      if (session) signedIn(session); else signedOut();
+    });
+  }
+
+  // ════════════════════════════════════════════════════════════════════════
+  // Weather (Open-Meteo, no key; opt-in geolocation)
+  // ════════════════════════════════════════════════════════════════════════
+  var WEATHER_KEY = "nofri.start.weather";
+  function wmo(code) {
+    var m = {
+      0: ["☀", "Clear"], 1: ["🌤", "Mainly clear"], 2: ["⛅", "Partly cloudy"], 3: ["☁", "Overcast"],
+      45: ["🌫", "Fog"], 48: ["🌫", "Fog"], 51: ["🌦", "Light drizzle"], 53: ["🌦", "Drizzle"], 55: ["🌧", "Drizzle"],
+      61: ["🌦", "Light rain"], 63: ["🌧", "Rain"], 65: ["🌧", "Heavy rain"], 71: ["🌨", "Light snow"], 73: ["🌨", "Snow"],
+      75: ["❄", "Heavy snow"], 80: ["🌦", "Showers"], 81: ["🌧", "Showers"], 82: ["⛈", "Heavy showers"],
+      95: ["⛈", "Thunderstorm"], 96: ["⛈", "Thunderstorm"], 99: ["⛈", "Thunderstorm"]
+    };
+    return { icon: (m[code] || ["🌡", "—"])[0], text: (m[code] || ["🌡", "—"])[1] };
+  }
+  function fetchWeather(lat, lon, box) {
+    clear(box); box.appendChild(el("p", { class: "muted skel", text: "Loading…" }));
+    var url = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + lon +
+      "&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1";
+    fetch(url).then(function (r) { return r.json(); }).then(function (d) {
+      clear(box);
+      var cur = d.current || {}, day = d.daily || {};
+      var info = wmo(cur.weather_code);
+      box.appendChild(el("div", { class: "weather-now" }, [
+        el("span", { class: "ico", text: info.icon }),
+        el("span", { class: "temp", text: Math.round(cur.temperature_2m) + "°" })
+      ]));
+      var hl = (day.temperature_2m_max && day.temperature_2m_max.length)
+        ? " · H " + Math.round(day.temperature_2m_max[0]) + "°  L " + Math.round(day.temperature_2m_min[0]) + "°" : "";
+      box.appendChild(el("p", { class: "weather-meta", text: info.text + hl }));
+    }).catch(function () { clear(box); box.appendChild(el("p", { class: "muted", text: "Couldn’t load weather." })); });
+  }
+  function renderWeather() {
+    var card = $("weather-card"), box = $("weather");
+    if (!card) return;
+    card.hidden = false;
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem(WEATHER_KEY) || "null"); } catch (e) {}
+    if (saved && saved.lat != null) { fetchWeather(saved.lat, saved.lon, box); return; }
+    clear(box);
+    box.appendChild(el("p", { class: "muted", text: "See a calm forecast for your day." }));
+    var btn = el("button", { class: "btn small", text: "Show local weather" });
+    btn.addEventListener("click", function () {
+      if (!navigator.geolocation) { box.textContent = "Location unavailable."; return; }
+      btn.textContent = "Locating…";
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        var lat = pos.coords.latitude, lon = pos.coords.longitude;
+        try { localStorage.setItem(WEATHER_KEY, JSON.stringify({ lat: lat, lon: lon })); } catch (e) {}
+        fetchWeather(lat, lon, box);
+      }, function () { clear(box); box.appendChild(el("p", { class: "muted", text: "Couldn’t get your location." })); });
+    });
+    box.appendChild(btn);
+  }
+
+  // ════════════════════════════════════════════════════════════════════════
   // Boot
   // ════════════════════════════════════════════════════════════════════════
   function init() {
@@ -640,6 +844,8 @@
     // Network blocks — additive, fail quietly.
     renderSports(cfg);
     renderNews(cfg);
+    renderAccount();
+    renderWeather();
 
     wireSettings(cfg);
   }
