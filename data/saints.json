@@ -1,0 +1,13 @@
+{
+  "_about": "Iconostasis — a row of saints/feasts shown across Nofri Start. Images load from Wikimedia Commons (verified filenames) via Special:FilePath; if one fails to load it falls back to a drawn gold halo + cross, so the row always reads as sacred. Add your own with a local \"src\": \"art/…\".",
+  "saints": [
+    { "name": "Christ Pantocrator", "file": "Spas_vsederzhitel_sinay.jpg" },
+    { "name": "The Theotokos", "file": "Vladimirskaya.jpg" },
+    { "name": "Archangel Michael", "file": "Mikharkhangel.jpg" },
+    { "name": "St John Chrysostom", "file": "Johnchrysostom.jpg" },
+    { "name": "St Mina", "file": "Menas.jpg" },
+    { "name": "St Anthony the Great", "file": "StAnthony.jpg" },
+    { "name": "St Nicholas", "file": "Nikola_from_1294.jpg" },
+    { "name": "Christ Enthroned", "file": "Deesis_mosaic_Hagia_Sophia.jpg" }
+  ]
+}

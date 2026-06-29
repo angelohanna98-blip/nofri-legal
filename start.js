@@ -200,6 +200,34 @@
     }).catch(function () {});
   }
 
+  // Iconostasis — a row of saints. Each tile shows the real icon when it loads
+  // (Wikimedia Commons) and a drawn gold halo + cross until/if it doesn't, so
+  // the row always reads as sacred, even fully offline.
+  function haloSvg() {
+    return '<svg viewBox="0 0 100 130" preserveAspectRatio="xMidYMid slice">' +
+      '<rect width="100" height="130" fill="#f6ead0"/>' +
+      '<path d="M28 114c0-18 10-30 22-30s22 12 22 30z" fill="#e6d2a4"/>' +
+      '<circle cx="50" cy="70" r="14" fill="#eaddbf"/>' +
+      '<circle cx="50" cy="46" r="22" fill="none" stroke="#B07A2A" stroke-width="3"/>' +
+      '<path d="M50 34v22M40 45h20" stroke="#B07A2A" stroke-width="3" fill="none"/>' +
+      '</svg>';
+  }
+  function renderIconostasis() {
+    var strip = $("iconostasis");
+    if (!strip) return;
+    fetch("data/saints.json").then(function (r) { return r.json(); }).then(function (d) {
+      var saints = (d && d.saints) || [];
+      saints.forEach(function (s) {
+        var arch = el("div", { class: "arch", html: haloSvg() });
+        var img = el("img", { alt: s.name });
+        img.addEventListener("load", function () { arch.innerHTML = ""; arch.appendChild(img); });
+        img.addEventListener("error", function () { /* keep the halo fallback */ });
+        img.src = s.src || commonsUrl(s.file);
+        strip.appendChild(el("div", { class: "saint" }, [arch, el("div", { class: "nm", text: s.name })]));
+      });
+    }).catch(function () {});
+  }
+
   function renderSaint(coptic) {
     var box = $("saint");
     // Lazy-load the synaxarium after first paint; never block the date.
@@ -830,6 +858,7 @@
     renderDailyText(now);
     renderSaint(coptic);
     renderIconOfDay(now);
+    renderIconostasis();
 
     // Network blocks — additive, fail quietly.
     renderSports(cfg);
