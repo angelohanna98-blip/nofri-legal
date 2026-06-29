@@ -4,171 +4,252 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nofri Start</title>
-<meta name="description" content="A distraction-free Christian start page: the Coptic date, saint of the day, a daily verse and prayer, your teams, and a few trusted headlines — with no infinite feed.">
+<meta name="description" content="A distraction-free Christian start page: your Coptic day, the saint and fast of the day, your Nofri calendar, a verse and prayer — over a quiet dawn.">
 <style>
-  :root { --gold:#B07A2A; --ink:#3A3733; --muted:#857B63; --bg:#FAF9F6; --card:#fff; --line:#E8E5DE; }
+  :root {
+    --gold:#B07A2A; --gold-deep:#8f5f1e; --ink:#34302b; --muted:#6f6657;
+    --line:rgba(120,100,70,.18); --card:rgba(255,255,255,.72); --card-solid:#fff;
+    --shadow:0 10px 30px rgba(60,50,35,.12); --radius:16px;
+  }
   * { box-sizing:border-box; }
-  body { margin:0; font-family:-apple-system,Georgia,serif; background:var(--bg); color:var(--ink); line-height:1.6; }
-  a { color:var(--gold); }
-  .wrap { max-width:980px; margin:0 auto; padding:40px 20px 72px; }
+  html, body { height:100%; }
+  body {
+    margin:0; font-family:-apple-system,Georgia,serif; color:var(--ink); line-height:1.6;
+    min-height:100%;
+  }
+  /* ---- layered dawn background ---- */
+  .bg { position:fixed; inset:0; z-index:-2;
+    background:linear-gradient(180deg,#f7ddbb 0%,#f0c8a6 26%,#cdc0bf 52%,#a7bccb 74%,#8aa6b8 100%); }
+  .bg-sun { position:fixed; left:50%; top:14vh; width:340px; height:340px; transform:translateX(-50%);
+    z-index:-2; border-radius:50%; background:radial-gradient(circle,rgba(255,241,214,.95),rgba(255,224,178,.5) 45%,transparent 70%);
+    filter:blur(2px); }
+  .bg-mtn { position:fixed; left:0; right:0; bottom:0; z-index:-1; width:100%; height:40vh; opacity:.85; }
+  @media (prefers-reduced-motion:no-preference){ .bg-sun{ animation:glow 9s ease-in-out infinite alternate; } }
+  @keyframes glow { from{opacity:.75;} to{opacity:1;} }
 
-  /* Header */
-  header.hero { text-align:center; margin-bottom:8px; }
-  .cross { font-size:2rem; color:var(--gold); }
-  .greeting { color:var(--muted); font-size:1.05rem; margin:2px 0 14px; }
-  #date-greg { font-size:1.6rem; color:var(--ink); }
-  #date-coptic { color:var(--gold); font-size:1.05rem; margin-top:2px; }
+  .wrap { max-width:1000px; margin:0 auto; padding:30px 20px 90px; }
 
-  /* Quiet web search */
-  .search { max-width:520px; margin:20px auto 0; display:flex; align-items:center; gap:10px;
-    background:var(--card); border:1px solid var(--line); border-radius:999px; padding:11px 20px;
-    box-shadow:0 1px 2px rgba(58,55,51,.04); }
-  .search:focus-within { border-color:var(--gold); }
+  /* ---- account strip ---- */
+  .account-strip { display:flex; justify-content:flex-end; min-height:30px; }
+  .ghost-btn { background:rgba(255,255,255,.6); border:1px solid var(--line); color:var(--gold-deep);
+    border-radius:999px; padding:7px 16px; font:inherit; font-size:.9rem; cursor:pointer; backdrop-filter:blur(8px); }
+  .ghost-btn:hover { background:#fff; }
+
+  /* ---- header ---- */
+  header.hero { text-align:center; margin-top:6px; }
+  .cross { font-size:2.3rem; color:var(--gold); text-shadow:0 2px 12px rgba(176,122,42,.35); }
+  .greeting { color:var(--muted); font-size:1.05rem; margin:4px 0 12px; }
+  #date-greg { font-size:1.8rem; color:#2c2823; }
+  #date-coptic { color:var(--gold-deep); font-size:1.08rem; margin-top:2px; }
+  #fast-pill { display:inline-block; margin-top:12px; padding:6px 16px; border-radius:999px;
+    background:rgba(255,255,255,.6); border:1px solid var(--line); font-size:.92rem; backdrop-filter:blur(8px); }
+  #fast-pill[hidden] { display:none; }
+  #fast-pill .dot { color:var(--gold); }
+
+  /* ---- search ---- */
+  .search { max-width:540px; margin:22px auto 0; display:flex; align-items:center; gap:10px;
+    background:rgba(255,255,255,.82); border:1px solid var(--line); border-radius:999px; padding:12px 22px;
+    box-shadow:var(--shadow); backdrop-filter:blur(8px); transition:box-shadow .2s, transform .2s; }
+  .search:focus-within { box-shadow:0 12px 34px rgba(176,122,42,.22); transform:translateY(-1px); }
   .search-ic { color:var(--muted); font-size:1.3rem; line-height:1; }
-  .search input { flex:1; border:none; background:transparent; font:inherit; font-size:1rem; color:var(--ink); outline:none; min-width:0; }
+  .search input { flex:1; border:none; background:transparent; font:inherit; font-size:1.02rem; color:var(--ink); outline:none; min-width:0; }
   .search input::placeholder { color:var(--muted); }
 
-  /* Section scaffold */
-  section { margin-top:34px; }
-  h2.block-title { color:var(--gold); font-size:1.15rem; margin:0 0 12px; text-align:center; letter-spacing:.02em; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 20px; }
-
-  /* Orthodox block */
-  .orthodox { max-width:640px; margin:0 auto; }
-  .orthodox .card + .card { margin-top:14px; }
-  .orthodox h3 { color:var(--gold); font-size:1rem; margin:0 0 6px; }
-  .feast-list { margin:0; padding-left:1.1em; }
-  .feast-list li { margin:4px 0; }
-  .synaxarium { margin-top:10px; }
-  .synaxarium summary { color:var(--gold); cursor:pointer; }
-  .synaxarium-body { margin-top:8px; color:var(--ink); font-size:.97rem; }
-  .synaxarium-body p { margin:.6em 0; }
-  .verse-text { font-size:1.1rem; margin:0; }
-  .verse-ref { color:var(--muted); margin:6px 0 0; }
-  .prayer-title { color:var(--gold); font-size:1rem; margin:0 0 4px; }
-  .icon-fig { margin:0; text-align:center; }
-  .icon-fig img { max-width:300px; width:100%; height:auto; border-radius:10px; border:1px solid var(--line); display:inline-block; }
-  .icon-fig figcaption { margin-top:10px; font-size:.88rem; line-height:1.45; }
-  .icon-fig .icon-title { color:var(--ink); }
-  .icon-fig .icon-src a { color:var(--gold); }
-
-  /* Quick links / focus */
-  .links { text-align:center; }
-  .focus-note { color:var(--muted); font-size:.92rem; margin:0 auto 14px; max-width:560px; text-align:center; }
-  #links a.pill, .pill { display:inline-block; margin:6px 8px; color:var(--gold); text-decoration:none;
-    border:1px solid var(--gold); border-radius:999px; padding:8px 20px; background:transparent; }
-  #links a.pill:hover { background:var(--gold); color:#fff; }
-
-  /* Sports + news grids */
-  .grid { display:grid; grid-template-columns:1fr; gap:14px; }
-  @media (min-width:720px) { .grid { grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); } }
-  .sport-card h3, .news-card h3 { color:var(--gold); font-size:1.05rem; margin:0 0 8px; }
-  .sport-line { margin:4px 0; }
-  .sport-label { display:inline-block; min-width:42px; color:var(--muted); font-size:.85rem; }
-  .news-list { margin:0; padding-left:1.1em; }
-  .news-list li { margin:6px 0; }
-  .news-list a { text-decoration:none; }
-  .news-list a:hover { text-decoration:underline; }
+  /* ---- cards & grid ---- */
+  .grid { display:grid; grid-template-columns:1fr; gap:18px; margin-top:26px; }
+  @media (min-width:760px){ .grid.two { grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); } }
+  .card { background:var(--card); border:1px solid rgba(255,255,255,.55); border-radius:var(--radius);
+    padding:20px 22px; box-shadow:var(--shadow); backdrop-filter:blur(12px); }
+  .card h3 { color:var(--gold-deep); font-size:1.02rem; margin:0 0 10px; letter-spacing:.01em; }
+  .card.span2 { grid-column:1 / -1; }
   .muted { color:var(--muted); }
-  .skel { opacity:.6; }
+  .skel { opacity:.55; }
 
-  /* Footer */
-  footer { margin-top:56px; text-align:center; color:var(--muted); font-size:.85rem; }
-  footer a { color:var(--gold); }
+  /* entrance + hover motion */
+  @media (prefers-reduced-motion:no-preference){
+    .rise { opacity:0; transform:translateY(14px); animation:rise .6s cubic-bezier(.2,.7,.2,1) forwards; }
+    .rise:nth-child(2){animation-delay:.05s} .rise:nth-child(3){animation-delay:.1s}
+    .rise:nth-child(4){animation-delay:.15s} .rise:nth-child(5){animation-delay:.2s}
+    .card { transition:transform .2s, box-shadow .2s; }
+    .card:hover { transform:translateY(-3px); box-shadow:0 16px 38px rgba(60,50,35,.16); }
+  }
+  @keyframes rise { to { opacity:1; transform:none; } }
 
-  /* Settings dialog */
-  dialog#settings { border:1px solid var(--line); border-radius:14px; max-width:620px; width:92%;
-    padding:0; color:var(--ink); background:var(--card); }
-  dialog#settings::backdrop { background:rgba(58,55,51,.35); }
+  /* ---- icon of the day ---- */
+  .icon-card { text-align:center; }
+  .icon-fig { margin:0; }
+  .icon-fig img { max-width:300px; width:100%; height:auto; border-radius:12px;
+    border:6px solid #fff; box-shadow:0 8px 26px rgba(60,50,35,.28); display:inline-block; }
+  .icon-fig figcaption { margin-top:12px; font-size:.9rem; line-height:1.5; }
+  .icon-fig .icon-title { color:var(--ink); font-size:1.02rem; }
+  .icon-fig .icon-src a { color:var(--gold-deep); }
+
+  /* ---- daily text ---- */
+  .verse-text { font-size:1.14rem; margin:0; }
+  .verse-ref { color:var(--muted); margin:8px 0 0; }
+  .prayer-title { color:var(--gold-deep); font-size:1rem; margin:0 0 4px; }
+  .feast-list { margin:0; padding-left:1.1em; } .feast-list li { margin:4px 0; }
+  .synaxarium { margin-top:10px; } .synaxarium summary { color:var(--gold-deep); cursor:pointer; }
+  .synaxarium-body { margin-top:8px; font-size:.97rem; } .synaxarium-body p { margin:.6em 0; }
+
+  /* ---- account / calendar card ---- */
+  .signin-row { display:flex; gap:8px; flex-wrap:wrap; }
+  .signin-row input { flex:1 1 180px; min-width:0; padding:10px 14px; border:1px solid var(--line); border-radius:10px; font:inherit; background:#fff; }
+  .btn { padding:10px 18px; border:1px solid var(--gold); background:var(--gold); color:#fff; border-radius:10px; cursor:pointer; font:inherit; }
+  .btn:hover { background:var(--gold-deep); border-color:var(--gold-deep); }
+  .btn.small { padding:7px 12px; font-size:.85rem; }
+  #signin-msg { color:var(--gold-deep); font-size:.88rem; margin:8px 0 0; }
+  .acct-head { display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
+  .event { display:flex; gap:12px; padding:9px 0; border-top:1px solid var(--line); }
+  .event:first-of-type { border-top:none; }
+  .event .when { min-width:74px; color:var(--gold-deep); font-size:.85rem; }
+  .event .what { flex:1; }
+  .event .what .ttl { color:var(--ink); }
+  .event .what .meta { color:var(--muted); font-size:.82rem; }
+  .day-head { color:var(--muted); font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; margin:12px 0 2px; }
+  .qa { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
+  .qa input, .qa select { padding:9px 12px; border:1px solid var(--line); border-radius:10px; font:inherit; background:#fff; }
+  .qa input[name=title] { flex:1 1 160px; min-width:0; }
+
+  /* ---- weather ---- */
+  .weather-now { display:flex; align-items:center; gap:14px; }
+  .weather-now .temp { font-size:2rem; color:var(--ink); }
+  .weather-now .ico { font-size:1.9rem; }
+  .weather-meta { color:var(--muted); font-size:.9rem; }
+
+  /* ---- links / focus ---- */
+  .links { text-align:center; }
+  .focus-note { color:#4a5159; font-size:.92rem; margin:0 auto 14px; max-width:580px; text-align:center; text-shadow:0 1px 2px rgba(255,255,255,.6); }
+  #links a.pill, .pill { display:inline-block; margin:6px 8px; color:var(--gold-deep); text-decoration:none;
+    border:1px solid var(--gold); border-radius:999px; padding:8px 20px; background:rgba(255,255,255,.55); transition:.18s; }
+  #links a.pill:hover { background:var(--gold); color:#fff; transform:translateY(-2px); }
+
+  /* ---- sports + news ---- */
+  .block-title { color:var(--gold-deep); font-size:1.05rem; margin:0 0 12px; text-align:center;
+    text-shadow:0 1px 3px rgba(255,255,255,.7); }
+  #sports > p, #news > p { text-align:center; color:#46505a; text-shadow:0 1px 2px rgba(255,255,255,.65); }
+  .sport-line { margin:4px 0; } .sport-label { display:inline-block; min-width:42px; color:var(--muted); font-size:.85rem; }
+  .news-list { margin:0; padding-left:1.1em; } .news-list li { margin:6px 0; }
+  .news-list a { text-decoration:none; color:var(--gold-deep); } .news-list a:hover { text-decoration:underline; }
+
+  /* ---- footer ---- */
+  footer { margin-top:54px; text-align:center; color:var(--muted); font-size:.85rem; }
+  footer a { color:var(--gold-deep); }
+
+  /* ---- settings dialog (unchanged structure) ---- */
+  dialog#settings { border:1px solid var(--line); border-radius:16px; max-width:620px; width:92%; padding:0; color:var(--ink); background:var(--card-solid); }
+  dialog#settings::backdrop { background:rgba(44,40,35,.4); backdrop-filter:blur(2px); }
   .dlg-head { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid var(--line); }
-  .dlg-head h2 { color:var(--gold); margin:0; font-size:1.2rem; }
-  .dlg-body { padding:8px 20px 22px; max-height:70vh; overflow:auto; }
+  .dlg-head h2 { color:var(--gold-deep); margin:0; font-size:1.2rem; }
+  .dlg-body { padding:8px 20px 22px; max-height:72vh; overflow:auto; }
   .dlg-body h3 { color:var(--ink); font-size:1rem; margin:20px 0 6px; }
   .set-list { list-style:none; margin:0 0 8px; padding:0; }
-  .set-list li { display:flex; justify-content:space-between; align-items:center; gap:8px;
-    border:1px solid var(--line); border-radius:8px; padding:6px 10px; margin:5px 0; font-size:.92rem; }
+  .set-list li { display:flex; justify-content:space-between; align-items:center; gap:8px; border:1px solid var(--line); border-radius:8px; padding:6px 10px; margin:5px 0; font-size:.92rem; }
   .set-list .remove { border:none; background:transparent; color:var(--muted); font-size:1.2rem; cursor:pointer; line-height:1; }
   form.add { display:flex; flex-wrap:wrap; gap:6px; margin:6px 0 4px; }
   form.add input { flex:1 1 120px; min-width:0; padding:7px 10px; border:1px solid var(--line); border-radius:8px; font:inherit; }
   form.add button { padding:7px 16px; border:1px solid var(--gold); background:var(--gold); color:#fff; border-radius:8px; cursor:pointer; font:inherit; }
   .hint { color:var(--muted); font-size:.82rem; margin:2px 0 0; }
-  .advanced { margin-top:8px; }
-  .advanced summary { color:var(--gold); cursor:pointer; font-size:.88rem; margin-bottom:6px; }
+  .advanced { margin-top:8px; } .advanced summary { color:var(--gold-deep); cursor:pointer; font-size:.88rem; margin-bottom:6px; }
   .suggest-row { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 2px; }
-  .suggest-row .chip { border:1px dashed var(--gold); color:var(--gold); background:transparent;
-    border-radius:999px; padding:4px 12px; font:inherit; font-size:.82rem; cursor:pointer; }
+  .suggest-row .chip { border:1px dashed var(--gold); color:var(--gold-deep); background:transparent; border-radius:999px; padding:4px 12px; font:inherit; font-size:.82rem; cursor:pointer; }
   .suggest-row .chip:hover { background:var(--gold); color:#fff; border-style:solid; }
   .suggest-row .chip[disabled] { opacity:.4; cursor:default; }
   .io-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); }
-  .io-row button, .io-row label { padding:7px 16px; border:1px solid var(--gold); color:var(--gold);
-    background:transparent; border-radius:8px; cursor:pointer; font:inherit; }
+  .io-row button, .io-row label { padding:7px 16px; border:1px solid var(--gold); color:var(--gold-deep); background:transparent; border-radius:8px; cursor:pointer; font:inherit; }
   #import-config { display:none; }
   #close-settings { border:none; background:transparent; color:var(--muted); font-size:1.5rem; cursor:pointer; line-height:1; }
 </style>
 </head>
 <body>
+<div class="bg"></div><div class="bg-sun"></div>
+<svg class="bg-mtn" viewBox="0 0 1440 420" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M0,420 L0,250 L220,150 L420,255 L650,120 L880,260 L1100,170 L1280,250 L1440,190 L1440,420 Z" fill="#b9c8d2" opacity=".5"/>
+  <path d="M0,420 L0,300 L260,210 L520,310 L760,200 L1000,320 L1230,230 L1440,300 L1440,420 Z" fill="#9fb1bd" opacity=".6"/>
+  <path d="M0,420 L0,355 L300,290 L560,360 L820,300 L1080,365 L1320,310 L1440,350 L1440,420 Z" fill="#8298a6" opacity=".7"/>
+</svg>
+
 <div class="wrap">
 
-  <header class="hero">
+  <!-- account strip -->
+  <div class="account-strip">
+    <div id="account-mini"></div>
+  </div>
+
+  <header class="hero rise">
     <div class="cross">☦</div>
     <p class="greeting">Nophri — good day. Begin here, not in the feed.</p>
     <div id="date-greg">—</div>
     <div id="date-coptic">—</div>
+    <div><span id="fast-pill" hidden></span></div>
   </header>
 
-  <!-- Quiet web search (Google under the hood, Nofri on the surface) -->
-  <form class="search" action="https://www.google.com/search" method="GET" role="search">
+  <!-- quiet web search -->
+  <form class="search rise" action="https://www.google.com/search" method="GET" role="search">
     <span class="search-ic" aria-hidden="true">⌕</span>
-    <input type="text" name="q" autocomplete="off" aria-label="Search the web"
-           placeholder="Search…">
+    <input type="text" name="q" autocomplete="off" aria-label="Search the web" placeholder="Search…">
   </form>
 
-  <!-- Orthodox daily content: renders instantly, works fully offline -->
-  <section class="orthodox">
-    <div class="card icon-card" id="icon-card" hidden>
+  <!-- icon of the day -->
+  <div class="grid">
+    <div class="card icon-card rise" id="icon-card" hidden>
       <h3>Icon of the day</h3>
-      <figure class="icon-fig">
-        <img id="icon-img" alt="">
-        <figcaption id="icon-cap" class="muted"></figcaption>
-      </figure>
+      <figure class="icon-fig"><img id="icon-img" alt=""><figcaption id="icon-cap" class="muted"></figcaption></figure>
     </div>
-    <div class="card">
+  </div>
+
+  <!-- daily + calendar -->
+  <div class="grid two">
+    <div class="card rise">
       <h3>Commemoration of the day</h3>
       <div id="saint"><p class="muted skel">Loading…</p></div>
     </div>
-    <div class="card">
+
+    <div class="card rise" id="account-card">
+      <div class="acct-head"><h3>Your day</h3><span id="account-name" class="muted"></span></div>
+      <div id="account-body"><p class="muted skel">Loading…</p></div>
+    </div>
+
+    <div class="card rise">
       <h3>Today’s reading</h3>
       <div id="verse"><p class="muted skel">Loading…</p></div>
     </div>
-    <div class="card">
+
+    <div class="card rise">
       <h3>A prayer for today</h3>
       <div id="prayer"><p class="muted skel">Loading…</p></div>
     </div>
-  </section>
 
-  <!-- Quick links / focus -->
-  <section class="links">
+    <div class="card rise" id="weather-card" hidden>
+      <h3>Weather</h3>
+      <div id="weather"><p class="muted">—</p></div>
+    </div>
+  </div>
+
+  <!-- quick links / focus -->
+  <section class="links" style="margin-top:30px">
     <h2 class="block-title">Where you meant to go</h2>
     <p class="focus-note">Only the few places you trust — no endless timeline to fall into.
     Want the distracting sites actually blocked? Add the <a href="https://github.com/angelohanna98-blip/nofri-legal/tree/main/extension">Nofri Focus</a> browser extension.</p>
     <div id="links"></div>
   </section>
 
-  <!-- Sports -->
-  <section>
+  <!-- sports -->
+  <section style="margin-top:30px">
     <h2 class="block-title">Your teams</h2>
-    <div id="sports" class="grid"></div>
+    <div id="sports" class="grid two"></div>
   </section>
 
-  <!-- News -->
-  <section>
+  <!-- news -->
+  <section style="margin-top:30px">
     <h2 class="block-title">A few headlines</h2>
-    <div id="news" class="grid"></div>
+    <div id="news" class="grid two"></div>
   </section>
 
   <footer>
     <a href="#" id="open-settings">Customize</a> ·
     <a href="index.html">Nofri</a> ·
+    <a href="setup.html">Set up</a> ·
     <a href="privacy.html">Privacy</a> ·
     <a href="support.html">Support</a>
     <p>© 2026 Nofri · Local-first and private — your settings stay on this device.</p>
@@ -182,7 +263,6 @@
     <button id="close-settings" title="Close" aria-label="Close">×</button>
   </div>
   <div class="dlg-body">
-
     <h3>Teams</h3>
     <ul id="set-teams" class="set-list"></ul>
     <form id="add-team" class="add">
@@ -200,7 +280,7 @@
         <input name="teamId" placeholder="ESPN team id" autocomplete="off">
         <button type="submit">Add</button>
       </form>
-      <p class="hint">Uses ESPN’s public data. sport/league examples: soccer · eng.1, basketball · nba, football · nfl, baseball · mlb, hockey · nhl. Find a team id from its ESPN page URL.</p>
+      <p class="hint">Uses ESPN’s public data. sport/league examples: soccer · eng.1, basketball · nba, football · nfl, baseball · mlb, hockey · nhl.</p>
     </details>
 
     <h3>News sources (RSS)</h3>
@@ -220,7 +300,7 @@
       <input name="url" placeholder="https://…" autocomplete="off">
       <button type="submit">Add</button>
     </form>
-    <p class="hint">These double as your “trusted sites” list for the upcoming focus extension.</p>
+    <p class="hint">These double as your “trusted sites” list for the focus extension.</p>
 
     <div class="io-row">
       <button id="export-config" type="button">Export config</button>
@@ -230,7 +310,10 @@
   </div>
 </dialog>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
 <script src="coptic.js"></script>
+<script src="nofri-account.js"></script>
 <script src="start.js"></script>
 </body>
 </html>
