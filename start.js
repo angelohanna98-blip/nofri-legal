@@ -49,7 +49,31 @@
         "https://agpeya.org"
       ]
     },
-    prefs: { newsService: "rss2json", cacheTtlMin: 60 }
+    prefs: {
+      newsService: "rss2json", cacheTtlMin: 60,
+      greeting: "Nophri — good day. Begin here, not in the feed.",
+      searchEngine: "google",
+      show: {} // section key -> false to hide; missing/true = shown
+    }
+  };
+
+  // Sections the user can show/hide, and the search engines they can pick.
+  var SECTIONS = [
+    { key: "iconostasis", id: "iconostasis", label: "Iconostasis (saints)" },
+    { key: "icon", id: "icon-card", label: "Icon of the day" },
+    { key: "account", id: "account-card", label: "Your day (calendar)" },
+    { key: "reading", id: "reading-card", label: "Today’s reading" },
+    { key: "prayer", id: "prayer-card", label: "A prayer for today" },
+    { key: "weather", id: "weather-card", label: "Weather" },
+    { key: "links", id: "links-section", label: "Quick links" },
+    { key: "sports", id: "sports-section", label: "Your teams" },
+    { key: "news", id: "news-section", label: "A few headlines" }
+  ];
+  var SEARCH_ENGINES = {
+    google: "https://www.google.com/search",
+    duckduckgo: "https://duckduckgo.com/",
+    bing: "https://www.bing.com/search",
+    brave: "https://search.brave.com/search"
   };
 
   // ── tiny DOM helpers ──────────────────────────────────────────────────────
@@ -550,7 +574,44 @@
     });
   }
 
+  // Apply the user's display preferences live (greeting, search engine, and
+  // which sections are shown).
+  function applyDisplay(cfg) {
+    var p = cfg.prefs || {};
+    var g = $("greeting"); if (g && p.greeting != null) g.textContent = p.greeting;
+    var form = document.querySelector("form.search");
+    if (form) {
+      if (p.searchEngine === "none") { form.classList.add("hidden-block"); }
+      else { form.classList.remove("hidden-block"); form.setAttribute("action", SEARCH_ENGINES[p.searchEngine] || SEARCH_ENGINES.google); }
+    }
+    var show = p.show || {};
+    SECTIONS.forEach(function (s) {
+      var node = $(s.id); if (!node) return;
+      if (show[s.key] === false) node.classList.add("hidden-block");
+      else node.classList.remove("hidden-block");
+    });
+  }
+
+  function buildDisplaySettings(cfg) {
+    var p = cfg.prefs;
+    if ($("set-greeting")) $("set-greeting").value = p.greeting || "";
+    if ($("set-search")) $("set-search").value = p.searchEngine || "google";
+    var box = $("section-toggles");
+    if (!box) return;
+    clear(box);
+    SECTIONS.forEach(function (s) {
+      var cb = el("input", { type: "checkbox" });
+      cb.checked = p.show[s.key] !== false;
+      cb.addEventListener("change", function () {
+        p.show[s.key] = cb.checked; saveConfig(cfg); applyDisplay(cfg);
+      });
+      var row = el("label", { class: "toggle-row" }, [cb, document.createTextNode(" " + s.label)]);
+      box.appendChild(row);
+    });
+  }
+
   function buildSettings(cfg) {
+    buildDisplaySettings(cfg);
     buildTeamSuggestions();
     buildNewsSuggestions(cfg);
     fillList("set-teams", cfg.teams, function (t) {
@@ -583,7 +644,15 @@
 
   function wireSettings(cfg) {
     $("open-settings").addEventListener("click", function (e) { e.preventDefault(); openSettings(cfg); });
+    var navC = $("nav-customize");
+    if (navC) navC.addEventListener("click", function (e) { e.preventDefault(); openSettings(cfg); });
     $("close-settings").addEventListener("click", function () { closeDlg(); });
+
+    // Display & feel
+    var gi = $("set-greeting");
+    if (gi) gi.addEventListener("input", function () { cfg.prefs.greeting = gi.value; saveConfig(cfg); applyDisplay(cfg); });
+    var se = $("set-search");
+    if (se) se.addEventListener("change", function () { cfg.prefs.searchEngine = se.value; saveConfig(cfg); applyDisplay(cfg); });
 
     // Simple path: add a team by name (resolved via TheSportsDB at load time).
     $("add-team").addEventListener("submit", function (e) {
@@ -852,6 +921,7 @@
 
     // Synchronous, offline-first.
     renderHeader(now, coptic);
+    applyDisplay(cfg);
     renderLinks(cfg);
 
     // Bundled-data blocks (fast local fetches).
